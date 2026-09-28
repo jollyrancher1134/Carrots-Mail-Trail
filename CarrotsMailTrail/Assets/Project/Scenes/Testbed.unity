@@ -572,7 +572,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 4
+  sprintSpeed: 7
   moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  sprintAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  maxStamina: 100
+  staminaDrain: 30
+  staminaRegen: 20
+  exhaustedRecover: 30
 --- !u!58 &1363824160
 CircleCollider2D:
   m_ObjectHideFlags: 0
