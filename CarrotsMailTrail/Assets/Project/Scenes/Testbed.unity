@@ -153,30 +153,35 @@ MonoBehaviour:
     houseName: Pink
     packageName: Teapot
     patienceSeconds: 20
+    pointValue: 10
     timeRemaining: 0
     mood: 0
   - customerName: Mr. Bramble
     houseName: Orange
     packageName: Seed Packet
     patienceSeconds: 180
+    pointValue: 10
     timeRemaining: 0
     mood: 0
   - customerName: Old Tom
     houseName: Blue
     packageName: Fishing Rod
     patienceSeconds: 120
+    pointValue: 10
     timeRemaining: 0
     mood: 0
   - customerName: Juniper
     houseName: Cyan
     packageName: Yarn Basket
     patienceSeconds: 165
+    pointValue: 10
     timeRemaining: 0
     mood: 0
   - customerName: Pip
     houseName: Yellow
     packageName: Birthday Cake
     patienceSeconds: 135
+    pointValue: 10
     timeRemaining: 0
     mood: 0
 --- !u!4 &40351254
@@ -189,6 +194,52 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.44725794, y: -6.424884, z: -10.173028}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &101102391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 101102393}
+  - component: {fileID: 101102392}
+  m_Layer: 0
+  m_Name: ShiftManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &101102392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101102391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fed20b27f8e87d4f8cc784fb71be29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shiftDurationSeconds: 180
+  orderManager: {fileID: 40351253}
+--- !u!4 &101102393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101102391}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22847,3 +22898,4 @@ SceneRoots:
   - {fileID: 2021634584}
   - {fileID: 678617916}
   - {fileID: 40351254}
+  - {fileID: 101102393}
