@@ -19,6 +19,10 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float lookAheadSmoothTime = 0.3f;
     // NEW: The playable area of the map (MapBounds is dragged in through the inspector)
     [SerializeField] private BoxCollider2D mapBounds;
+    // NEW: How zoomed in the doorstep camera gets (smaller = closer)
+    [SerializeField] private float doorstepOrthoSize = 3f;
+    // NEW: How gently the doorstep camera eases in, holds, and eases back out
+    [SerializeField] private float doorstepSmoothTime = 0.5f;
 
     /* Declare private fields: 
      * Fields can only be accessed within the script, cannot be seen outside
@@ -35,6 +39,16 @@ public class CameraController : MonoBehaviour
     private Vector2 lookAheadVelocity;
     // NEW: This camera, used to read its size and aspect ratio for the clamp
     private Camera cam;
+    // NEW: The two states the camera can be in
+    private enum CameraState { StreetFollow, Doorstep }
+    // NEW: Which state the camera is currently in
+    private CameraState state = CameraState.StreetFollow;
+    // NEW: The house door being framed while in the Doorstep state (null while on the street)
+    private Transform doorstepDoor;
+    // NEW: The zoom level to ease back to once the Doorstep state ends
+    private float streetOrthoSize;
+    // NEW: SmoothDamp's memory of the zoom's speed between frames
+    private float orthoVelocity;
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -47,13 +61,63 @@ public class CameraController : MonoBehaviour
         focusPoint = target.position;
         targetBody = target.GetComponent<Rigidbody2D>();
         cam = GetComponent<Camera>();
+        streetOrthoSize = cam.orthographicSize;
+    }
+
+    /* NEW: Public EnterDoorstep Method:
+     * ~ Called by a DeliveryZone when Carrot arrives at its door
+     * ~ Switches to the Doorstep state, which eases in and frames Carrot and the door
+     */
+    public void EnterDoorstep(Transform door)
+    {
+        state = CameraState.Doorstep;
+        doorstepDoor = door;
+    }
+
+    /* NEW: Public ExitDoorstep Method:
+     * ~ Called by a DeliveryZone when Carrot leaves its door
+     * ~ Switches back to the StreetFollow state, which eases the camera back out
+     */
+    public void ExitDoorstep()
+    {
+        state = CameraState.StreetFollow;
+        doorstepDoor = null;
     }
 
     /* Void LateUpdate Method:
      * ~ Runs after every Update, so Carrot has already moved this frame (prevents jitter)
-     * ~ Applies the dead zone, adds look ahead, clamps to the map, then eases the camera toward the result (dampening)
+     * ~ Hands off to whichever state the camera is currently in
      */
     private void LateUpdate()
+    {
+        if (state == CameraState.Doorstep && doorstepDoor != null)
+        {
+            UpdateDoorstep();
+        }
+        else
+        {
+            UpdateStreetFollow();
+        }
+    }
+
+    /* NEW: Void UpdateDoorstep Method:
+     * ~ Eases the camera to the midpoint between Carrot and the door, and zooms in to frame both
+     * ~ Runs every frame while in the Doorstep state, so it holds steady once it arrives
+     */
+    private void UpdateDoorstep()
+    {
+        Vector3 midpoint = (target.position + doorstepDoor.position) / 2f;
+        Vector3 desiredPosition = new Vector3(midpoint.x, midpoint.y, transform.position.z);
+
+        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, doorstepSmoothTime);
+        cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, doorstepOrthoSize, ref orthoVelocity, doorstepSmoothTime);
+    }
+
+    /* Void UpdateStreetFollow Method:
+     * ~ The original follow camera: applies the dead zone, adds look ahead, clamps to the map, then eases toward the result
+     * ~ Also eases the zoom back to its normal street level, in case the Doorstep state just ended
+     */
+    private void UpdateStreetFollow()
     {
         // Dead zone (X): how far Carrot is from the centre of the box sideways
         float differenceX = target.position.x - focusPoint.x;
@@ -124,6 +188,9 @@ public class CameraController : MonoBehaviour
 
         // Moves the camera part of the way there each frame, using velocity to stay smooth
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothTime);
+
+        // NEW: Eases the zoom back to the normal street level (does nothing if it's already there)
+        cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, streetOrthoSize, ref orthoVelocity, smoothTime);
     }
 
     /* Void OnDrawGizmos Method:

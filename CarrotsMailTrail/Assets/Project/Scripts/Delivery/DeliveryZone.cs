@@ -9,6 +9,8 @@ public class DeliveryZone : MonoBehaviour
     [SerializeField] private string houseName;
     // The OrderManager in the scene, used to look up this house's order
     [SerializeField] private OrderManager orderManager;
+    // NEW: The main camera's CameraController, used to trigger the doorstep camera
+    [SerializeField] private CameraController cameraController;
 
     /* Void OnTriggerEnter2D:
      * ~ Unity calls this automatically when another collider enters this zone's trigger
@@ -20,6 +22,9 @@ public class DeliveryZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Carrot has arrived at " + houseName);
+
+            // NEW: Switches to the doorstep camera, framing Carrot and this house's door
+            cameraController.EnterDoorstep(transform);
 
             // Asks the OrderManager which order belongs to this house
             Order order = orderManager.GetOrderForHouse(houseName);
@@ -42,13 +47,16 @@ public class DeliveryZone : MonoBehaviour
 
     /* Void OnTriggerExit2D:
      * ~ Unity calls this automatically when another collider leaves this zone's trigger
-     * ~ Later this will close the package list and return to the street camera
+     * ~ Later this will close the package list too, once it exists
      */
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Carrot has left " + houseName);
+
+            // NEW: Switches back to the street follow camera
+            cameraController.ExitDoorstep();
         }
     }
 }

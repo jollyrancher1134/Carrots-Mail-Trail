@@ -525,6 +525,10 @@ PrefabInstance:
       propertyPath: orderManager
       value: 
       objectReference: {fileID: 40351253}
+    - target: {fileID: 8927729415521646035, guid: ae71effae07577b43a657c83ef18706c, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2100286439}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -775,6 +779,10 @@ PrefabInstance:
       propertyPath: orderManager
       value: 
       objectReference: {fileID: 40351253}
+    - target: {fileID: 8927729415521646035, guid: ae71effae07577b43a657c83ef18706c, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2100286439}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22583,6 +22591,10 @@ PrefabInstance:
       propertyPath: orderManager
       value: 
       objectReference: {fileID: 40351253}
+    - target: {fileID: 8927729415521646035, guid: ae71effae07577b43a657c83ef18706c, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2100286439}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22660,6 +22672,10 @@ PrefabInstance:
       propertyPath: orderManager
       value: 
       objectReference: {fileID: 40351253}
+    - target: {fileID: 8927729415521646035, guid: ae71effae07577b43a657c83ef18706c, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2100286439}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22822,6 +22838,8 @@ MonoBehaviour:
   maxLookAhead: 3
   lookAheadSmoothTime: 0.3
   mapBounds: {fileID: 678617915}
+  doorstepOrthoSize: 3
+  doorstepSmoothTime: 0.5
 --- !u!1001 &3693181921123799104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22878,6 +22896,10 @@ PrefabInstance:
       propertyPath: orderManager
       value: 
       objectReference: {fileID: 40351253}
+    - target: {fileID: 8927729415521646035, guid: ae71effae07577b43a657c83ef18706c, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2100286439}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
