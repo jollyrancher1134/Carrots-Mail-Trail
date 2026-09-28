@@ -152,23 +152,33 @@ MonoBehaviour:
   - customerName: Mrs. Maple
     houseName: Pink
     packageName: Teapot
-    patienceSeconds: 150
+    patienceSeconds: 20
+    timeRemaining: 0
+    mood: 0
   - customerName: Mr. Bramble
     houseName: Orange
     packageName: Seed Packet
     patienceSeconds: 180
+    timeRemaining: 0
+    mood: 0
   - customerName: Old Tom
     houseName: Blue
     packageName: Fishing Rod
     patienceSeconds: 120
+    timeRemaining: 0
+    mood: 0
   - customerName: Juniper
     houseName: Cyan
     packageName: Yarn Basket
     patienceSeconds: 165
+    timeRemaining: 0
+    mood: 0
   - customerName: Pip
     houseName: Yellow
     packageName: Birthday Cake
     patienceSeconds: 135
+    timeRemaining: 0
+    mood: 0
 --- !u!4 &40351254
 Transform:
   m_ObjectHideFlags: 0

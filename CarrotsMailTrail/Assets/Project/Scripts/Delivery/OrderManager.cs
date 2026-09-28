@@ -9,6 +9,30 @@ public class OrderManager : MonoBehaviour
     // The hard coded list of orders for this shift (filled in through the inspector)
     [SerializeField] private List<Order> orders;
 
+    /* Void Start Method:
+     * ~ Runs once before the first frame
+     * ~ Starts every customer's patience timer at the beginning of the shift
+     */
+    private void Start()
+    {
+        foreach (Order order in orders)
+        {
+            order.StartTimer();
+        }
+    }
+
+    /* Void Update Method:
+     * ~ Runs every frame
+     * ~ Counts down every customer's patience at the same time
+     */
+    private void Update()
+    {
+        foreach (Order order in orders)
+        {
+            order.Tick(Time.deltaTime);
+        }
+    }
+
     /* Public GetOrderForHouse Method:
      * ~ Other scripts (like DeliveryZone) call this to ask which order belongs to a house
      * ~ Returns the matching order, or null if that house has no order
