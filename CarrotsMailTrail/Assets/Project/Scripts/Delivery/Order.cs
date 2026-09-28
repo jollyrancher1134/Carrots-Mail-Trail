@@ -17,6 +17,8 @@ public class Order
     public string packageName;
     // How long they will wait, in seconds
     public float patienceSeconds;
+    // Points awarded when this order is delivered
+    public int pointValue = 10;
 
     /* Live patience state (changes during play):
      * ~ Public so it can be watched in the inspector while testing

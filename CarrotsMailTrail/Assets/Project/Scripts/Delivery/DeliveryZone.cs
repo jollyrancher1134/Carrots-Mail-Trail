@@ -28,6 +28,10 @@ public class DeliveryZone : MonoBehaviour
             if (order != null)
             {
                 Debug.Log(order.customerName + " (" + order.mood + ") is waiting for a " + order.packageName);
+
+                // NEW: Registers the delivery and awards points
+                // ~ There's no handheld package list yet, so arriving at the house delivers its order automatically
+                orderManager.CompleteOrder(order);
             }
             else
             {
