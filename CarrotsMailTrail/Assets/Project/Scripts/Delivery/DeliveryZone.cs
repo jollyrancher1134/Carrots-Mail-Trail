@@ -7,16 +7,32 @@ public class DeliveryZone : MonoBehaviour
      */
     // The name of the house this zone belongs to (typed in the inspector for each zone)
     [SerializeField] private string houseName;
+    // NEW: The OrderManager in the scene, used to look up this house's order
+    [SerializeField] private OrderManager orderManager;
 
     /* Void OnTriggerEnter2D:
      * ~ Unity calls this automatically when another collider enters this zone's trigger
      * ~ Checks the Player tag so only Carrot counts as arriving
+     * ~ Looks up this house's order and reports what the customer is waiting for
      */
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Carrot has arrived at " + houseName);
+
+            // NEW: Asks the OrderManager which order belongs to this house
+            Order order = orderManager.GetOrderForHouse(houseName);
+
+            // NEW: Reports the order if there is one, otherwise says this house has nothing waiting
+            if (order != null)
+            {
+                Debug.Log(order.customerName + " is waiting for a " + order.packageName);
+            }
+            else
+            {
+                Debug.Log("No order for " + houseName);
+            }
         }
     }
 
