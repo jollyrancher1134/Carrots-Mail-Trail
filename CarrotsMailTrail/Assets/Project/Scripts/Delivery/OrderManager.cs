@@ -39,6 +39,14 @@ public class OrderManager : MonoBehaviour
         }
     }
 
+    /* Public GetOrders Method:
+     * ~ Returns our list of orders for the shift
+     */
+    public List<Order> GetOrders()
+    {
+        return orders;
+    }
+
     /* Public GetOrderForHouse Method:
      * ~ Other scripts (like DeliveryZone) call this to ask which order belongs to a house
      * ~ Returns the matching order, or null if that house has no order or it's already delivered

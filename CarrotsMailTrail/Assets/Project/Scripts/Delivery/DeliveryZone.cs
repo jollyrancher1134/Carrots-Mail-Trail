@@ -11,6 +11,8 @@ public class DeliveryZone : MonoBehaviour
     [SerializeField] private OrderManager orderManager;
     // NEW: The main camera's CameraController, used to trigger the doorstep camera
     [SerializeField] private CameraController cameraController;
+    // The handheld package object. which is used to display orders and package selections on the UI
+    [SerializeField] private HandheldPackage handheldPackage;
 
     /* Void OnTriggerEnter2D:
      * ~ Unity calls this automatically when another collider enters this zone's trigger
@@ -34,9 +36,13 @@ public class DeliveryZone : MonoBehaviour
             {
                 Debug.Log(order.customerName + " (" + order.mood + ") is waiting for a " + order.packageName);
 
-                // NEW: Registers the delivery and awards points
-                // ~ There's no handheld package list yet, so arriving at the house delivers its order automatically
-                orderManager.CompleteOrder(order);
+                // Opens the handheld package ui upon reaching a door.
+                handheldPackage.Open(order);
+                // Commented out to implement handheld package ui
+                /* NEW: Registers the delivery and awards points
+                 * ~ There's no handheld package list yet, so arriving at the house delivers its order automatically
+                 * orderManager.CompleteOrder(order);
+                 */
             }
             else
             {
