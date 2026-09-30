@@ -49,6 +49,10 @@ public class CameraController : MonoBehaviour
     private float streetOrthoSize;
     // NEW: SmoothDamp's memory of the zoom's speed between frames
     private float orthoVelocity;
+    // NEW: The camera's position before shake is added on top, so shake never leaks into the SmoothDamp math
+    private Vector3 basePosition;
+    // NEW: The current shake jitter, added to basePosition each frame
+    private Vector3 shakeOffset;
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -62,6 +66,37 @@ public class CameraController : MonoBehaviour
         targetBody = target.GetComponent<Rigidbody2D>();
         cam = GetComponent<Camera>();
         streetOrthoSize = cam.orthographicSize;
+        // NEW: Starts the shake's base position at wherever the camera already is
+        basePosition = transform.position;
+    }
+
+    /* NEW: Public Shake Method:
+     * ~ Called by HandheldPackage when the wrong package is confirmed
+     * ~ Jitters the camera around its current smoothed position for a short time, then settles
+     */
+    public void Shake(float duration = 0.2f, float magnitude = 0.15f)
+    {
+        StopCoroutine(nameof(ShakeRoutine));
+        StartCoroutine(ShakeRoutine(duration, magnitude));
+    }
+
+    /* NEW: ShakeRoutine Coroutine:
+     * ~ Picks a new random offset each frame for the given duration, then clears it
+     * ~ Only touches shakeOffset, which is added on top of basePosition in LateUpdate,
+     *   so it never gets fed back into the SmoothDamp calls as real camera movement
+     */
+    private System.Collections.IEnumerator ShakeRoutine(float duration, float magnitude)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            shakeOffset = Random.insideUnitCircle * magnitude;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        shakeOffset = Vector3.zero;
     }
 
     /* NEW: Public EnterDoorstep Method:
@@ -109,7 +144,8 @@ public class CameraController : MonoBehaviour
         Vector3 midpoint = (target.position + doorstepDoor.position) / 2f;
         Vector3 desiredPosition = new Vector3(midpoint.x, midpoint.y, transform.position.z);
 
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, doorstepSmoothTime);
+        basePosition = Vector3.SmoothDamp(basePosition, desiredPosition, ref velocity, doorstepSmoothTime);
+        transform.position = basePosition + shakeOffset;
         cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, doorstepOrthoSize, ref orthoVelocity, doorstepSmoothTime);
     }
 
@@ -187,7 +223,8 @@ public class CameraController : MonoBehaviour
         }
 
         // Moves the camera part of the way there each frame, using velocity to stay smooth
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothTime);
+        basePosition = Vector3.SmoothDamp(basePosition, desiredPosition, ref velocity, smoothTime);
+        transform.position = basePosition + shakeOffset;
 
         // NEW: Eases the zoom back to the normal street level (does nothing if it's already there)
         cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, streetOrthoSize, ref orthoVelocity, smoothTime);

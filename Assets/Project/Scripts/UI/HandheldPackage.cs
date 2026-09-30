@@ -31,6 +31,18 @@ public class HandheldPackage : MonoBehaviour
     // The selection text which displays the currently selected package
     [SerializeField] private TMP_Text selectionText;
 
+    [Header("Feedback")]
+    // NEW: The street-follow camera, shaken when the wrong package is confirmed
+    [SerializeField] private CameraController cameraController;
+    // NEW: Tracks strikes and ends the shift once Carrot runs out of them
+    [SerializeField] private ShiftManager shiftManager;
+    // NEW: Plays the wrong-pick and delivered sounds
+    [SerializeField] private AudioSource sfxSource;
+    // NEW: Played when the wrong package is confirmed
+    [SerializeField] private AudioClip wrongPickClip;
+    // NEW: Played when the correct package is confirmed
+    [SerializeField] private AudioClip deliveredClip;
+
     // The chosen package in the BAG tab
     private Order selectedOrder;
     // The order for the customer whose door Carrot is currently at
@@ -107,7 +119,35 @@ public class HandheldPackage : MonoBehaviour
         if (selectedOrder == currentOrder)
         {
             orderManager.CompleteOrder(currentOrder);
+            // NEW: Plays the delivered cue
+            PlaySfx(deliveredClip);
             Close();
+        }
+        // NEW: Wrong package selected - shakes the camera, plays a sound, and counts as a strike
+        // instead of silently doing nothing
+        else
+        {
+            if (cameraController != null)
+            {
+                cameraController.Shake();
+            }
+            PlaySfx(wrongPickClip);
+            if (shiftManager != null)
+            {
+                shiftManager.AddStrike();
+            }
+        }
+    }
+
+    /* NEW: Void PlaySfx Method:
+     * ~ Plays a one-shot sound effect if both the source and the clip are assigned
+     * ~ Safe to call with no clip set yet, so feedback can be wired before sound assets exist
+     */
+    private void PlaySfx(AudioClip clip)
+    {
+        if (sfxSource != null && clip != null)
+        {
+            sfxSource.PlayOneShot(clip);
         }
     }
 
