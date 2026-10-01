@@ -14,6 +14,8 @@ public class OrderManager : MonoBehaviour
 
     // Running total of points earned from completed deliveries
     public int Score { get; private set; }
+    // NEW: True once every order in the shift has been delivered
+    public bool AllDelivered => deliveredOrders.Count == orders.Count;
 
     /* Void Start Method:
      * ~ Runs once before the first frame

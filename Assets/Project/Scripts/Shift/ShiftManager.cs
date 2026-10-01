@@ -75,7 +75,28 @@ public class ShiftManager : MonoBehaviour
         // NEW: Shows the game over panel with the final score, if one is wired up
         if (gameOverPanel != null)
         {
-            gameOverPanel.Show(finalScore);
+            gameOverPanel.Show(finalScore, won: false);
+        }
+    }
+
+    /* NEW: Public Win Method:
+     * ~ Called by HandheldPackage once every order in the shift has been delivered
+     * ~ Ends the shift early with a win, instead of a loss, framing
+     */
+    public void Win()
+    {
+        if (ShiftEnded)
+        {
+            return;
+        }
+
+        ShiftEnded = true;
+        int finalScore = orderManager != null ? orderManager.Score : 0;
+        Debug.Log("All orders delivered! Final score: " + finalScore);
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.Show(finalScore, won: true);
         }
     }
 

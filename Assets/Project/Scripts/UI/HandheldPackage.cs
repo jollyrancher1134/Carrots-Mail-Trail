@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -47,6 +48,8 @@ public class HandheldPackage : MonoBehaviour
     private Order selectedOrder;
     // The order for the customer whose door Carrot is currently at
     private Order currentOrder;
+    // NEW: Maps each order to its manifest row, so a delivered order's row can be removed
+    private readonly Dictionary<Order, CustomerEntry> manifestEntries = new Dictionary<Order, CustomerEntry>();
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -75,6 +78,20 @@ public class HandheldPackage : MonoBehaviour
             CustomerEntry entry = Instantiate(customerEntryPrefab, customerList);
             // Setup the text display for the new customer entry order data
             entry.Setup(order);
+            // NEW: Remembers this row so it can be removed once the order is delivered
+            manifestEntries[order] = entry;
+        }
+    }
+
+    /* NEW: Void RemoveManifestEntry Method:
+     * ~ Removes a delivered order's row from the Manifest, so the list visibly shrinks
+     */
+    private void RemoveManifestEntry(Order order)
+    {
+        if (manifestEntries.TryGetValue(order, out CustomerEntry entry) && entry != null)
+        {
+            Destroy(entry.gameObject);
+            manifestEntries.Remove(order);
         }
     }
 
@@ -103,9 +120,9 @@ public class HandheldPackage : MonoBehaviour
 
     /* Void ConfirmPackage Method:
      * ~ Confirms the currently selected package
-     * ~ If the selected package belongs to the current customer,
-     *   the order is completed and the handheld closes
-     * ~ Wrong package selections currently do nothing
+     * ~ If the selected package belongs to the current customer, the order is completed,
+     *   its manifest row is removed, the handheld closes, and a win is checked for
+     * ~ Otherwise it counts as a strike and gives feedback instead of doing nothing
      */
     public void ConfirmPackage()
     {
@@ -121,6 +138,13 @@ public class HandheldPackage : MonoBehaviour
             orderManager.CompleteOrder(currentOrder);
             // NEW: Plays the delivered cue
             PlaySfx(deliveredClip);
+            // NEW: Removes the delivered customer from the Manifest list
+            RemoveManifestEntry(currentOrder);
+            // NEW: Wins the shift once every order has been delivered
+            if (orderManager.AllDelivered && shiftManager != null)
+            {
+                shiftManager.Win();
+            }
             Close();
         }
         // NEW: Wrong package selected - shakes the camera, plays a sound, and counts as a strike
@@ -164,6 +188,22 @@ public class HandheldPackage : MonoBehaviour
 
         gameObject.SetActive(true);
         ShowBag();
+    }
+
+    /* NEW: Public OpenEmpty Method:
+     * ~ Called by DeliveryZone when a house has no order left (already delivered)
+     * ~ Opens straight to the Manifest instead of the Bag - there's nothing to confirm here,
+     *   so leaving currentOrder null keeps ConfirmPackage's existing guard safe
+     */
+    public void OpenEmpty()
+    {
+        currentOrder = null;
+
+        selectedOrder = null;
+        selectionText.text = "Selected: None";
+
+        gameObject.SetActive(true);
+        ShowManifest();
     }
 
     /* Void Close Method:

@@ -47,6 +47,9 @@ public class DeliveryZone : MonoBehaviour
             else
             {
                 Debug.Log("No order for " + houseName);
+                // NEW: Opens the handheld to the Manifest instead of doing nothing -
+                // this house's order was already delivered, not genuinely missing
+                handheldPackage.OpenEmpty();
             }
         }
     }

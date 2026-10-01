@@ -21,12 +21,13 @@ public class GameOverPanel : MonoBehaviour
     }
 
     /* Public Show Method:
-     * ~ Called by ShiftManager.EndShift() once the shift is over
-     * ~ Displays the final score and shows the panel
+     * ~ Called by ShiftManager.EndShift()/Win() once the shift is over
+     * ~ Displays the final score (with a win/lose framing) and shows the panel
      */
-    public void Show(int finalScore)
+    public void Show(int finalScore, bool won)
     {
-        finalScoreText.text = "Final Score: " + finalScore;
+        string prefix = won ? "You Win! Final Score: " : "Shift Over — Final Score: ";
+        finalScoreText.text = prefix + finalScore;
         panel.SetActive(true);
     }
 }
