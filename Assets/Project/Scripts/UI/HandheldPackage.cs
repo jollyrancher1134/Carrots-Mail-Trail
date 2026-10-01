@@ -33,38 +33,43 @@ public class HandheldPackage : MonoBehaviour
     [SerializeField] private TMP_Text selectionText;
 
     [Header("Feedback")]
-    // NEW: The street-follow camera, shaken when the wrong package is confirmed
+    // The camera controller, shaken when the wrong package is confirmed
     [SerializeField] private CameraController cameraController;
-    // NEW: Tracks strikes and ends the shift once Carrot runs out of them
+    // Tracks strikes and ends the shift once Carrot runs out of them
     [SerializeField] private ShiftManager shiftManager;
-    // NEW: Plays the wrong-pick and delivered sounds
+    // Plays the wrong pick and delivered sounds
     [SerializeField] private AudioSource sfxSource;
-    // NEW: Played when the wrong package is confirmed
+    // Played when the wrong package is confirmed
     [SerializeField] private AudioClip wrongPickClip;
-    // NEW: Played when the correct package is confirmed
+    // Played when the correct package is confirmed
     [SerializeField] private AudioClip deliveredClip;
 
     // The chosen package in the BAG tab
     private Order selectedOrder;
     // The order for the customer whose door Carrot is currently at
     private Order currentOrder;
-    // NEW: Maps each order to its manifest row, so a delivered order's row can be removed
+    // True while the handheld is open at a door (so Start doesn't hide it if a door opened it first)
+    private bool isOpen;
+    // Maps each order to its manifest row, so a delivered order's row can be removed
     private readonly Dictionary<Order, CustomerEntry> manifestEntries = new Dictionary<Order, CustomerEntry>();
 
     /* Void Start Method:
      * ~ Runs once before the first frame
-     * ~ Populates the manifest and sets the manifest to the first active tab when the handheld ui opens
+     * ~ Fills the manifest and bag, then hides the handheld until Carrot reaches a door
      */
     private void Start()
     {
         PopulateManifest();
         PopulateBag();
 
-        // Sets currently selected order to nothing
-        selectedOrder = null;
-        selectionText.text = "Selected: None";
-
-        ShowManifest();
+        // Only reset and hide if a door didn't already open it
+        if (!isOpen)
+        {
+            selectedOrder = null;
+            selectionText.text = "Selected: None";
+            ShowManifest();
+            gameObject.SetActive(false);
+        }
     }
 
     /* Void PopulateManifest Method:
@@ -78,12 +83,12 @@ public class HandheldPackage : MonoBehaviour
             CustomerEntry entry = Instantiate(customerEntryPrefab, customerList);
             // Setup the text display for the new customer entry order data
             entry.Setup(order);
-            // NEW: Remembers this row so it can be removed once the order is delivered
+            // Remembers this row so it can be removed once the order is delivered
             manifestEntries[order] = entry;
         }
     }
 
-    /* NEW: Void RemoveManifestEntry Method:
+    /* Void RemoveManifestEntry Method:
      * ~ Removes a delivered order's row from the Manifest, so the list visibly shrinks
      */
     private void RemoveManifestEntry(Order order)
@@ -96,7 +101,7 @@ public class HandheldPackage : MonoBehaviour
     }
 
     /* Void PopulateBag Method:
-     * ~ Populates the bag with all orders. (Temporary until packing feature implemented)
+     * ~ Populates the bag with all orders (temporary until the packing feature is implemented)
      */
     private void PopulateBag()
     {
@@ -122,7 +127,7 @@ public class HandheldPackage : MonoBehaviour
      * ~ Confirms the currently selected package
      * ~ If the selected package belongs to the current customer, the order is completed,
      *   its manifest row is removed, the handheld closes, and a win is checked for
-     * ~ Otherwise it counts as a strike and gives feedback instead of doing nothing
+     * ~ Otherwise it counts as a strike and gives feedback
      */
     public void ConfirmPackage()
     {
@@ -136,19 +141,18 @@ public class HandheldPackage : MonoBehaviour
         if (selectedOrder == currentOrder)
         {
             orderManager.CompleteOrder(currentOrder);
-            // NEW: Plays the delivered cue
+            // Plays the delivered cue
             PlaySfx(deliveredClip);
-            // NEW: Removes the delivered customer from the Manifest list
+            // Removes the delivered customer from the Manifest list
             RemoveManifestEntry(currentOrder);
-            // NEW: Wins the shift once every order has been delivered
+            // Wins the shift once every order has been delivered
             if (orderManager.AllDelivered && shiftManager != null)
             {
                 shiftManager.Win();
             }
             Close();
         }
-        // NEW: Wrong package selected - shakes the camera, plays a sound, and counts as a strike
-        // instead of silently doing nothing
+        // Wrong package selected: shakes the camera, plays a sound, and counts as a strike
         else
         {
             if (cameraController != null)
@@ -163,8 +167,8 @@ public class HandheldPackage : MonoBehaviour
         }
     }
 
-    /* NEW: Void PlaySfx Method:
-     * ~ Plays a one-shot sound effect if both the source and the clip are assigned
+    /* Void PlaySfx Method:
+     * ~ Plays a one shot sound effect if both the source and the clip are assigned
      * ~ Safe to call with no clip set yet, so feedback can be wired before sound assets exist
      */
     private void PlaySfx(AudioClip clip)
@@ -181,6 +185,7 @@ public class HandheldPackage : MonoBehaviour
      */
     public void Open(Order order)
     {
+        isOpen = true;
         currentOrder = order;
 
         selectedOrder = null;
@@ -190,13 +195,13 @@ public class HandheldPackage : MonoBehaviour
         ShowBag();
     }
 
-    /* NEW: Public OpenEmpty Method:
-     * ~ Called by DeliveryZone when a house has no order left (already delivered)
-     * ~ Opens straight to the Manifest instead of the Bag - there's nothing to confirm here,
-     *   so leaving currentOrder null keeps ConfirmPackage's existing guard safe
+    /* Public OpenEmpty Method:
+     * ~ Called by DeliveryZone when a house has no order left (already delivered or the customer is Gone)
+     * ~ Opens straight to the Manifest instead of the Bag, since there's nothing to confirm here
      */
     public void OpenEmpty()
     {
+        isOpen = true;
         currentOrder = null;
 
         selectedOrder = null;
@@ -212,6 +217,7 @@ public class HandheldPackage : MonoBehaviour
      */
     public void Close()
     {
+        isOpen = false;
         selectedOrder = null;
         selectionText.text = "Selected: None";
 
@@ -219,7 +225,7 @@ public class HandheldPackage : MonoBehaviour
     }
 
     /* Void ShowManifest Method:
-     * Sets the active handheld page to the Manifest page.
+     * ~ Sets the active handheld page to the Manifest page
      */
     public void ShowManifest()
     {
@@ -228,7 +234,7 @@ public class HandheldPackage : MonoBehaviour
     }
 
     /* Void ShowBag Method:
-     * Sets the active handheld page to the Bag page.
+     * ~ Sets the active handheld page to the Bag page
      */
     public void ShowBag()
     {

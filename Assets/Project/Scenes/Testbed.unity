@@ -152,7 +152,7 @@ MonoBehaviour:
   - customerName: Mrs. Maple
     houseName: Pink
     packageName: Teapot
-    patienceSeconds: 20
+    patienceSeconds: 80
     pointValue: 10
     timeRemaining: 0
     mood: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
     pointValue: 10
     timeRemaining: 0
     mood: 0
+  shiftManager: {fileID: 101102392}
 --- !u!4 &40351254
 Transform:
   m_ObjectHideFlags: 0
@@ -230,9 +231,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shiftDurationSeconds: 180
   orderManager: {fileID: 40351253}
-  gameOverPanel: {fileID: 1225645700}
   maxStrikes: 3
-  playerMovement: {fileID: 0}
+  gameOverPanel: {fileID: 1225645700}
 --- !u!4 &101102393
 Transform:
   m_ObjectHideFlags: 0

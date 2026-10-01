@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class ShiftManager : MonoBehaviour
@@ -6,142 +7,178 @@ public class ShiftManager : MonoBehaviour
     /*Serialize fields:
      * ~ this allows for the value to be viewed inside the inspector
      */
-    // How long a shift lasts, in seconds (set in the inspector)
+    // How long one shift lasts, in seconds
     [SerializeField] private float shiftDurationSeconds = 180f;
-    // The OrderManager in the scene, used to report the final score when the shift ends
+    // The OrderManager in the scene, used to read the final score
     [SerializeField] private OrderManager orderManager;
-    // NEW: The game over panel, shown with the final score once the shift ends
-    [SerializeField] private GameOverPanel gameOverPanel;
-    // NEW: How many wrong picks Carrot can make before the shift ends early
+    // How many strikes end the run (three strikes, per the GDD)
     [SerializeField] private int maxStrikes = 3;
-    // Carrot's movement script, enabled on game start
-    [SerializeField] private PlayerMovement playerMovement;
+    // The panel shown when the shift ends (final score and restart)
+    [SerializeField] private GameOverPanel gameOverPanel;
 
-    // How many seconds are left in the current shift
-    public float TimeRemaining { get; private set; }
-    // Whether the shift is currently running (false once it ends)
-    public bool ShiftEnded { get; private set; }
-    // NEW: How many wrong picks Carrot has made this shift
-    public int Strikes { get; private set; }
+    /* Declare private fields:
+     * Fields can only be accessed within the script, cannot be seen outside
+     */
+    // Seconds left in the current shift
+    private float timeRemaining;
+    // True once the shift has ended for any reason (clock ran out, won, or game over)
+    private bool shiftOver;
+    // How many strikes Carrot has this shift
+    private int strikes;
+    // True if every order was delivered
+    private bool won;
+
+    /* Public read only properties:
+     * ~ Let the HUD and UI read the shift state without being able to change it
+     */
+    public float TimeRemaining
+    {
+        get { return timeRemaining; }
+    }
+
+    public bool IsShiftOver
+    {
+        get { return shiftOver; }
+    }
+
+    public int Strikes
+    {
+        get { return strikes; }
+    }
+
+    public int MaxStrikes
+    {
+        get { return maxStrikes; }
+    }
+
+    public bool IsWon
+    {
+        get { return won; }
+    }
+
+    public bool IsGameOver
+    {
+        get { return strikes >= maxStrikes; }
+    }
 
     /* Void Start Method:
      * ~ Runs once before the first frame
-     * ~ Begins the shift clock
-     * ~ Allows player movement
+     * ~ Fills the shift clock, clears strikes, and makes sure the OrderManager and panel are connected
      */
     private void Start()
     {
-        TimeRemaining = shiftDurationSeconds;
-        ShiftEnded = false;
-        playerMovement.enabled = true;
+        timeRemaining = shiftDurationSeconds;
+        shiftOver = false;
+        strikes = 0;
+        won = false;
+
+        // If a field was left empty in the inspector, find it in the scene instead
+        if (orderManager == null)
+        {
+            orderManager = FindFirstObjectByType<OrderManager>();
+        }
+        if (gameOverPanel == null)
+        {
+            gameOverPanel = FindFirstObjectByType<GameOverPanel>();
+        }
     }
 
     /* Void Update Method:
      * ~ Runs every frame
-     * ~ Counts down the shift clock and ends the shift at zero
-     * ~ Also listens for the restart key so testing doesn't require re-entering play mode
+     * ~ Checks for restart, then counts down the shift clock and ends the shift at zero
      */
     private void Update()
     {
-        if (!ShiftEnded)
-        {
-            TimeRemaining -= Time.deltaTime;
+        // Restart: R on keyboard or View/Back on gamepad (new Input System)
+        bool restartKeyboard = Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame;
+        bool restartGamepad = Gamepad.current != null && Gamepad.current.selectButton.wasPressedThisFrame;
 
-            if (TimeRemaining <= 0f)
-            {
-                TimeRemaining = 0f;
-                EndShift();
-            }
-        }
-
-        // NEW: Press R at any time to restart the shift (stands in for a restart button until UI exists)
-        if (Input.GetKeyDown(KeyCode.R))
+        if (restartKeyboard || restartGamepad)
         {
             RestartShift();
+            return;
         }
-    }
 
-    /* Public EndShift Method:
-     * ~ Stops the clock and reports the final score
-     * ~ Safe to call directly too (e.g. later from a "wrong pick" strikes system)
-     */
-    public void EndShift()
-    {
-        if (ShiftEnded)
+        // Once the shift is over, the clock stops
+        if (shiftOver)
         {
             return;
         }
 
-        ShiftEnded = true;
-        int finalScore = orderManager != null ? orderManager.Score : 0;
-        Debug.Log("Shift over! Final score: " + finalScore);
+        // Counts down the shift clock in real seconds
+        timeRemaining -= Time.deltaTime;
 
-        // NEW: Shows the game over panel with the final score, if one is wired up
-        if (gameOverPanel != null)
+        if (timeRemaining <= 0f)
         {
-            gameOverPanel.Show(finalScore, won: false);
+            timeRemaining = 0f;
+            EndShift("Time's up!");
         }
     }
 
-    /* NEW: Public Win Method:
-     * ~ Called by HandheldPackage once every order in the shift has been delivered
-     * ~ Ends the shift early with a win, instead of a loss, framing
-     */
-    public void Win()
-    {
-        if (ShiftEnded)
-        {
-            return;
-        }
-
-        ShiftEnded = true;
-        int finalScore = orderManager != null ? orderManager.Score : 0;
-        Debug.Log("All orders delivered! Final score: " + finalScore);
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.Show(finalScore, won: true);
-        }
-    }
-
-    /* NEW: Public AddStrike Method:
-     * ~ Called by HandheldPackage when the wrong package is confirmed
-     * ~ Ends the shift early once Carrot runs out of strikes
+    /* Public AddStrike Method:
+     * ~ Called when Carrot picks the wrong package, or when a customer runs out of patience
+     * ~ Three strikes ends the run with a game over
      */
     public void AddStrike()
     {
-        if (ShiftEnded)
+        if (shiftOver)
         {
             return;
         }
 
-        Strikes++;
-        Debug.Log("Wrong pick! Strikes: " + Strikes + "/" + maxStrikes);
+        strikes++;
+        Debug.Log("Strike " + strikes + " of " + maxStrikes);
 
-        if (Strikes >= maxStrikes)
+        if (strikes >= maxStrikes)
         {
-            EndShift();
+            EndShift("Game over! Three strikes.");
+        }
+    }
+
+    /* Public Win Method:
+     * ~ Called once every order has been delivered
+     * ~ Ends the shift early as a win
+     */
+    public void Win()
+    {
+        if (shiftOver)
+        {
+            return;
+        }
+
+        won = true;
+        EndShift("Every order delivered!");
+    }
+
+    /* Void EndShift Method:
+     * ~ Stops the shift, reports why it ended, and shows the game over panel with the final score
+     */
+    private void EndShift(string reason)
+    {
+        shiftOver = true;
+
+        int finalScore = 0;
+        if (orderManager != null)
+        {
+            finalScore = orderManager.Score;
+        }
+
+        Debug.Log(reason + " Final score: " + finalScore);
+
+        // Shows the end of shift panel
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.Show(finalScore, won);
         }
     }
 
     /* Public RestartShift Method:
-     * ~ Reloads the current scene, which resets every order, timer, and the score
+     * ~ Reloads the current scene, so timers, score, strikes and Carrot all start fresh
+     * ~ Resets timeScale first, otherwise restarting from the pause menu would load a frozen game
      */
     public void RestartShift()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
-    }
-
-    /* Public QuitGame Method:
-     * ~ Closes the app in a built game or stops play mode when testing inside unity editor
-     */
-    public void QuitGame()
-    {
-    #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-    #else
-        Application.Quit();
-    #endif
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

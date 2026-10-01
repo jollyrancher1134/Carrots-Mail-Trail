@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    /*Serialize fields: 
+    /*Serialize fields:
      * ~ this allows for the value to be viewed inside the inspector
      */
     // Walk speed of carrot (since serialized it can change inside the inspector)
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     // How much stamina Carrot needs before sprinting again after running out
     [SerializeField] private float exhaustedRecover = 30f;
 
-    /* Declare private fields: 
+    /* Declare private fields:
      * Fields can only be accessed within the script, cannot be seen outside
     */
     // Handles the physics of Carrot by setting velocity while handling physical collisions with walls
@@ -40,8 +40,6 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
     // True after stamina runs out, until it recovers to exhaustedRecover
     private bool isExhausted;
-    // TEMPORARY: Counts time between stamina log messages (remove once sprint is tuned)
-    private float logTimer;
 
     /* Public StaminaPercent Property:
      * ~ Gives stamina as a fraction from 0 (empty) to 1 (full)
@@ -79,7 +77,17 @@ public class PlayerMovement : MonoBehaviour
         sprintAction.action.Enable();
     }
 
-    /* Void Update Method: 
+    /* Void OnDisable Method:
+     * ~ Runs whenever the script is switched off (pause or game over)
+     * ~ Stops Carrot in place, otherwise his last velocity would keep him sliding
+     */
+    void OnDisable()
+    {
+        moveInput = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    /* Void Update Method:
      * ~ Method is called once per frame
      * ~ Reads Carrot's input each frame and remembers the last direction moved
      * ~ Decides walk or sprint speed and drains or refills stamina
@@ -130,18 +138,10 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Carrot recovered and can sprint again. Stamina: " + currentStamina.ToString("F0"));
             }
         }
-
-        // TEMPORARY: Prints stamina every half second for testing (remove once sprint is tuned)
-        logTimer += Time.deltaTime;
-        if (logTimer >= 0.5f)
-        {
-            Debug.Log("Stamina: " + currentStamina.ToString("F0") + " | Exhausted: " + isExhausted);
-            logTimer = 0f;
-        }
     }
 
-    /* Void FixedUpdate Method: 
-     * ~ Method runs on the physics clock (50 times per second) 
+    /* Void FixedUpdate Method:
+     * ~ Method runs on the physics clock (50 times per second)
      * ~ Sets Carrot's Velocity to the input direction x current speed (walk or sprint)
      */
     private void FixedUpdate()
