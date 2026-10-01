@@ -14,6 +14,8 @@ public class ShiftManager : MonoBehaviour
     [SerializeField] private GameOverPanel gameOverPanel;
     // NEW: How many wrong picks Carrot can make before the shift ends early
     [SerializeField] private int maxStrikes = 3;
+    // Carrot's movement script, enabled on game start
+    [SerializeField] private PlayerMovement playerMovement;
 
     // How many seconds are left in the current shift
     public float TimeRemaining { get; private set; }
@@ -25,11 +27,13 @@ public class ShiftManager : MonoBehaviour
     /* Void Start Method:
      * ~ Runs once before the first frame
      * ~ Begins the shift clock
+     * ~ Allows player movement
      */
     private void Start()
     {
         TimeRemaining = shiftDurationSeconds;
         ShiftEnded = false;
+        playerMovement.enabled = true;
     }
 
     /* Void Update Method:
@@ -127,5 +131,17 @@ public class ShiftManager : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
+    }
+
+    /* Public QuitGame Method:
+     * ~ Closes the app in a built game or stops play mode when testing inside unity editor
+     */
+    public void QuitGame()
+    {
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
+        Application.Quit();
+    #endif
     }
 }

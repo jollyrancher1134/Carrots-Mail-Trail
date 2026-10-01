@@ -10,6 +10,8 @@ public class GameOverPanel : MonoBehaviour
     [SerializeField] private GameObject panel;
     // Displays the final score
     [SerializeField] private TMP_Text finalScoreText;
+    // Carrot's movement script, disabled while game end so input can't sneak through
+    [SerializeField] private PlayerMovement playerMovement;
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -29,5 +31,7 @@ public class GameOverPanel : MonoBehaviour
         string prefix = won ? "You Win! Final Score: " : "Shift Over — Final Score: ";
         finalScoreText.text = prefix + finalScore;
         panel.SetActive(true);
+        playerMovement.enabled = false;
+
     }
 }
