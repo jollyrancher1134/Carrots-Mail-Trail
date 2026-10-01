@@ -152,7 +152,7 @@ MonoBehaviour:
   - customerName: Mrs. Maple
     houseName: Pink
     packageName: Teapot
-    patienceSeconds: 80
+    patienceSeconds: 150
     pointValue: 10
     timeRemaining: 0
     mood: 0

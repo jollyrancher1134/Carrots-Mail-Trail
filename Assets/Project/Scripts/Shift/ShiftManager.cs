@@ -181,4 +181,16 @@ public class ShiftManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    /* Public QuitGame Method:
+     * ~ Closes the app in a built game, or stops play mode when testing inside the Unity editor
+     */
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }
