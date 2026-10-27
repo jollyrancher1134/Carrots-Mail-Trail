@@ -197,14 +197,13 @@ public class ShiftManager : MonoBehaviour
     }
 
     /* Public QuitGame Method:
-     * ~ Closes the app in a built game, or stops play mode when testing inside the Unity editor
+     * ~ Called by the pause menu and game over panel's Quit button
+     * ~ Returns to the Title scene rather than closing the app, so "Quit to Menu" means what it says
+     * ~ Resets timeScale first, same reason as RestartShift: pausing leaves it at 0
      */
     public void QuitGame()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Title");
     }
 }

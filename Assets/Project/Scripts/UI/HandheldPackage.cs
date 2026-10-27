@@ -48,6 +48,8 @@ public class HandheldPackage : MonoBehaviour
 
     // Carrot's transform, used as the delivery sparkle's spawn point
     private Transform player;
+    // Carrot's squash-and-stretch juice, pulsed on pickup (select) and deliver (confirm)
+    private SquashStretch squashStretch;
 
     // The chosen package in the BAG tab
     private Order selectedOrder;
@@ -57,6 +59,8 @@ public class HandheldPackage : MonoBehaviour
     private bool isOpen;
     // Maps each order to its manifest row, so a delivered order's row can be removed
     private readonly Dictionary<Order, CustomerEntry> manifestEntries = new Dictionary<Order, CustomerEntry>();
+    // Maps each order to its bag button, so a delivered order's package can be removed
+    private readonly Dictionary<Order, PackageButton> bagEntries = new Dictionary<Order, PackageButton>();
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -73,6 +77,11 @@ public class HandheldPackage : MonoBehaviour
             if (taggedPlayer != null)
             {
                 player = taggedPlayer.transform;
+                squashStretch = player.GetComponent<SquashStretch>();
+                if (squashStretch == null)
+                {
+                    squashStretch = player.gameObject.AddComponent<SquashStretch>();
+                }
             }
         }
 
@@ -125,6 +134,20 @@ public class HandheldPackage : MonoBehaviour
             PackageButton button = Instantiate(packageButtonPrefab, packageList);
             // Setup the text display for the new package order data
             button.Setup(order, this);
+            // Remembers this button so it can be removed once the order is delivered
+            bagEntries[order] = button;
+        }
+    }
+
+    /* Void RemoveBagEntry Method:
+     * ~ Removes a delivered order's package button from the Bag, so it can't be picked again
+     */
+    private void RemoveBagEntry(Order order)
+    {
+        if (bagEntries.TryGetValue(order, out PackageButton button) && button != null)
+        {
+            Destroy(button.gameObject);
+            bagEntries.Remove(order);
         }
     }
 
@@ -135,6 +158,12 @@ public class HandheldPackage : MonoBehaviour
     {
         selectedOrder = order;
         selectionText.text = "Selected: " + order.packageName;
+
+        // PickUp juice: a quick squash as Carrot picks the package up out of the bag
+        if (squashStretch != null)
+        {
+            squashStretch.Pulse();
+        }
     }
 
     /* Void ConfirmPackage Method:
@@ -162,8 +191,14 @@ public class HandheldPackage : MonoBehaviour
             {
                 Instantiate(deliverySparklePrefab, player.position, Quaternion.identity);
             }
-            // Removes the delivered customer from the Manifest list
+            // Deliver juice: a second squash as the package leaves Carrot's hands
+            if (squashStretch != null)
+            {
+                squashStretch.Pulse();
+            }
+            // Removes the delivered customer from the Manifest list and their package from the Bag
             RemoveManifestEntry(currentOrder);
+            RemoveBagEntry(currentOrder);
             // Wins the shift once every order has been delivered
             if (orderManager.AllDelivered && shiftManager != null)
             {

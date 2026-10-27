@@ -20,6 +20,8 @@ public class OrderManager : MonoBehaviour
     public bool AllDelivered => deliveredOrders.Count == orders.Count;
     // True once every order has either been delivered or gone (nothing left for Carrot to do this shift)
     public bool AllResolved => orders.TrueForAll(order => deliveredOrders.Contains(order) || order.mood == CustomerMood.Gone);
+    // How many orders have been delivered this shift, for the day-grade screen
+    public int DeliveredCount => deliveredOrders.Count;
 
     /* Void Start Method:
      * ~ Runs once before the first frame
