@@ -43,6 +43,11 @@ public class HandheldPackage : MonoBehaviour
     [SerializeField] private AudioClip wrongPickClip;
     // Played when the correct package is confirmed
     [SerializeField] private AudioClip deliveredClip;
+    // Spawned at Carrot's position when a delivery is confirmed correct
+    [SerializeField] private ParticleSystem deliverySparklePrefab;
+
+    // Carrot's transform, used as the delivery sparkle's spawn point
+    private Transform player;
 
     // The chosen package in the BAG tab
     private Order selectedOrder;
@@ -61,6 +66,15 @@ public class HandheldPackage : MonoBehaviour
     {
         PopulateManifest();
         PopulateBag();
+
+        if (player == null)
+        {
+            GameObject taggedPlayer = GameObject.FindGameObjectWithTag("Player");
+            if (taggedPlayer != null)
+            {
+                player = taggedPlayer.transform;
+            }
+        }
 
         // Only reset and hide if a door didn't already open it
         if (!isOpen)
@@ -143,6 +157,11 @@ public class HandheldPackage : MonoBehaviour
             orderManager.CompleteOrder(currentOrder);
             // Plays the delivered cue
             PlaySfx(deliveredClip);
+            // Sparkle at Carrot's feet to sell a correct delivery
+            if (deliverySparklePrefab != null && player != null)
+            {
+                Instantiate(deliverySparklePrefab, player.position, Quaternion.identity);
+            }
             // Removes the delivered customer from the Manifest list
             RemoveManifestEntry(currentOrder);
             // Wins the shift once every order has been delivered

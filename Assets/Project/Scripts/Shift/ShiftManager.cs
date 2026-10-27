@@ -150,6 +150,20 @@ public class ShiftManager : MonoBehaviour
         EndShift("Every order delivered!");
     }
 
+    /* Public EndShiftNoOrdersLeft Method:
+     * ~ Called by OrderManager once every order is resolved (delivered or gone) but it wasn't a full win
+     * ~ Wraps the shift up instead of ticking an empty shift down to zero
+     */
+    public void EndShiftNoOrdersLeft()
+    {
+        if (shiftOver)
+        {
+            return;
+        }
+
+        EndShift("No customers left waiting.");
+    }
+
     /* Void EndShift Method:
      * ~ Stops the shift, reports why it ended, and shows the game over panel with the final score
      */

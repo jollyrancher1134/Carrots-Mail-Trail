@@ -18,6 +18,8 @@ public class OrderManager : MonoBehaviour
     public int Score { get; private set; }
     // True once every order in the shift has been delivered
     public bool AllDelivered => deliveredOrders.Count == orders.Count;
+    // True once every order has either been delivered or gone (nothing left for Carrot to do this shift)
+    public bool AllResolved => orders.TrueForAll(order => deliveredOrders.Contains(order) || order.mood == CustomerMood.Gone);
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -43,6 +45,12 @@ public class OrderManager : MonoBehaviour
      */
     private void Update()
     {
+        // Shift's over: stop ticking patience entirely, so moods don't keep changing behind the game over screen
+        if (shiftManager != null && shiftManager.IsShiftOver)
+        {
+            return;
+        }
+
         foreach (Order order in orders)
         {
             // Delivered customers are done, so their timer stops
@@ -62,6 +70,13 @@ public class OrderManager : MonoBehaviour
                     shiftManager.AddStrike();
                 }
             }
+        }
+
+        // Nothing left to deliver and the shift didn't already end in strikes: wrap it up instead of
+        // ticking an empty shift down to zero (AllDelivered is handled separately, as an instant win)
+        if (!AllDelivered && AllResolved && shiftManager != null && !shiftManager.IsShiftOver)
+        {
+            shiftManager.EndShiftNoOrdersLeft();
         }
     }
 

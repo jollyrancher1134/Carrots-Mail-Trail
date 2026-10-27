@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float staminaRegen = 20f;
     // How much stamina Carrot needs before sprinting again after running out
     [SerializeField] private float exhaustedRecover = 30f;
+    // Animator fed MoveX, MoveY, Speed and IsSprinting each frame (optional, auto-found if left empty)
+    [SerializeField] private Animator animator;
 
     /* Declare private fields:
      * Fields can only be accessed within the script, cannot be seen outside
@@ -63,6 +65,12 @@ public class PlayerMovement : MonoBehaviour
         // Carrot starts the shift fully rested
         currentStamina = maxStamina;
         currentSpeed = walkSpeed;
+
+        // Finds Carrot's Animator if one wasn't dragged in through the inspector
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
     }
 
     /* Void OnEnable Method:
@@ -138,6 +146,26 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Carrot recovered and can sprint again. Stamina: " + currentStamina.ToString("F0"));
             }
         }
+
+        FeedAnimator(isMoving, sprintHeld);
+    }
+
+    /* Void FeedAnimator Method:
+     * ~ Sends this frame's movement into the Animator, so Idle/Walk/Run blend trees can react
+     * ~ MoveX/MoveY hold Carrot's last facing direction (steady while idle, so idle still faces the right way)
+     * ~ Speed is zero while standing still, otherwise the walk or sprint speed
+     */
+    private void FeedAnimator(bool isMoving, bool sprintHeld)
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        animator.SetFloat("MoveX", facing.x);
+        animator.SetFloat("MoveY", facing.y);
+        animator.SetFloat("Speed", isMoving ? currentSpeed : 0f);
+        animator.SetBool("IsSprinting", sprintHeld && isMoving && !isExhausted);
     }
 
     /* Void FixedUpdate Method:
