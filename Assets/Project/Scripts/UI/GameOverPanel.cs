@@ -11,6 +11,8 @@ public class GameOverPanel : MonoBehaviour
     [SerializeField] private GameObject panel;
     // Displays the final score
     [SerializeField] private TMP_Text finalScoreText;
+    // Displays the player's final letter grade
+    [SerializeField] private TMP_Text letterGradeText;
     // Carrot's movement script, disabled while game end so input can't sneak through
     [SerializeField] private PlayerMovement playerMovement;
     // The order/delivery count source, for the deliveries made/missed breakdown
@@ -56,6 +58,10 @@ public class GameOverPanel : MonoBehaviour
      * ~ Called by ShiftManager.EndShift()/Win() once the shift is over
      * ~ Displays the final score plus deliveries made/missed (with a win/lose framing),
      *   and shows the panel
+     *   
+     * ~ Added a letter grade system that calculates the player's grade
+     *   based on their final score and displays it on the day grade
+     *   review screen.
      */
     public void Show(int finalScore, bool won)
     {
@@ -70,8 +76,33 @@ public class GameOverPanel : MonoBehaviour
         }
 
         finalScoreText.text = prefix + finalScore + deliveries;
+
+        if (letterGradeText != null)
+        {
+            letterGradeText.text = "Day Grade: " + CalculateGrade(finalScore);
+        }
+
         panel.SetActive(true);
         playerMovement.enabled = false;
 
+    }
+
+    /* Calculate Grade Method:
+     * ~ Determines the player's letter grade based on their final score.
+     * ~ The higher the score the better the grade.
+     * ~ Returns a letter grade from A to F.
+     */
+    private string CalculateGrade(int finalScore)
+    {
+        if (finalScore >= 50)
+            return "A";
+        else if (finalScore >= 40)
+            return "B";
+        else if (finalScore >= 30)
+            return "C";
+        else if (finalScore >= 20)
+            return "D";
+        else
+            return "F";
     }
 }
