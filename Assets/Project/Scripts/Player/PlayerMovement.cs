@@ -52,6 +52,9 @@ public class PlayerMovement : MonoBehaviour
         get { return currentStamina / maxStamina; }
     }
 
+    [Header("UI References")]
+    [SerializeField] private HandheldPackage handheldPackage;
+
     /* Void Awake Method:
      * ~ Awake runs once when Carrot is loaded into the scene, before anything else
      * ~ Uses GetComponent to find Carrot's Rigidbody2D and save it in rb
@@ -102,8 +105,27 @@ public class PlayerMovement : MonoBehaviour
      */
     void Update()
     {
+        // Stop Carrot from moving while navigating the handheld
+        if (handheldPackage != null && handheldPackage.IsOpen)
+        {
+            moveInput = Vector2.zero;
+            currentSpeed = walkSpeed;
+
+            // Keep Carrot facing the same direction, but play idle
+            FeedAnimator(false, false);
+            return;
+        }
+
         // Stores what the player is pressing this frame as a direction (x, y)
-        moveInput = moveAction.action.ReadValue<Vector2>();
+        // moveInput = moveAction.action.ReadValue<Vector2>(); (removed)
+
+        // Ignore movement controls while the handheld is open.
+        // The rest of Update still runs, allowing stamina to regenerate while stopped at a zone.
+        bool handheldOpen = handheldPackage != null && handheldPackage.IsOpen;
+
+        moveInput = handheldOpen
+            ? Vector2.zero
+            : moveAction.action.ReadValue<Vector2>();
 
         // Only updates facing while Carrot is moving, so Carrot remembers their direction when standing still
         if (moveInput.sqrMagnitude > 0.01f)

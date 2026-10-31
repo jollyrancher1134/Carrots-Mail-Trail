@@ -17,6 +17,22 @@ public class PackageButton : MonoBehaviour
     // Handheld package UI 
     private HandheldPackage handheldUI;
 
+    private Color normalColor;
+    private static readonly Color chosenColor =
+        new Color(1f, 0.78f, 0.25f, 1f);
+
+    public Order Order => order;
+
+    private void Awake()
+    {
+        normalColor = button.image.color;
+    }
+
+    public void SetChosen(bool chosen)
+    {
+        button.image.color = chosen ? chosenColor : normalColor;
+    }
+
     /* Void Setup Method
      * ~ Sets up a package button within the package list
      */

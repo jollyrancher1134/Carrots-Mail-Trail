@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using TMPro;
 
 public class HandheldPackage : MonoBehaviour
@@ -46,6 +48,12 @@ public class HandheldPackage : MonoBehaviour
     // Spawned at Carrot's position when a delivery is confirmed correct
     [SerializeField] private ParticleSystem deliverySparklePrefab;
 
+    [Header("Gamepad Navigation")]
+    [SerializeField] private Button manifestTabButton;
+    [SerializeField] private Button bagTabButton;
+    [SerializeField] private Button confirmButton;
+    [SerializeField] private Button closeButton;
+
     // Carrot's transform, used as the delivery sparkle's spawn point
     private Transform player;
     // Carrot's squash-and-stretch juice, pulsed on pickup (select) and deliver (confirm)
@@ -57,6 +65,14 @@ public class HandheldPackage : MonoBehaviour
     private Order currentOrder;
     // True while the handheld is open at a door (so Start doesn't hide it if a door opened it first)
     private bool isOpen;
+    /* Public IsOpen:
+    * ~ Allows other scripts to check whether the handheld is open
+    * ~ Only HandheldPackage can change this value
+    */
+    public bool IsOpen
+    {
+        get { return isOpen; }
+    }
     // Maps each order to its manifest row, so a delivered order's row can be removed
     private readonly Dictionary<Order, CustomerEntry> manifestEntries = new Dictionary<Order, CustomerEntry>();
     // Maps each order to its bag button, so a delivered order's package can be removed
@@ -163,6 +179,12 @@ public class HandheldPackage : MonoBehaviour
         if (squashStretch != null)
         {
             squashStretch.Pulse();
+        }
+
+        foreach (PackageButton packageButton in
+             packageList.GetComponentsInChildren<PackageButton>())
+        {
+            packageButton.SetChosen(packageButton.Order == order);
         }
     }
 
@@ -271,10 +293,24 @@ public class HandheldPackage : MonoBehaviour
      */
     public void Close()
     {
-        isOpen = false;
+        // Clears the selected package
         selectedOrder = null;
         selectionText.text = "Selected: None";
 
+        // Removes persistent package highlighting
+        foreach (PackageButton packageButton in
+                 packageList.GetComponentsInChildren<PackageButton>(true))
+        {
+            packageButton.SetChosen(false);
+        }
+
+        // Clears keyboard/gamepad focus
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        isOpen = false;
         gameObject.SetActive(false);
     }
 
@@ -285,6 +321,7 @@ public class HandheldPackage : MonoBehaviour
     {
         manifestPage.SetActive(true);
         bagPage.SetActive(false);
+        SelectButton(manifestTabButton);
     }
 
     /* Void ShowBag Method:
@@ -294,5 +331,19 @@ public class HandheldPackage : MonoBehaviour
     {
         manifestPage.SetActive(false);
         bagPage.SetActive(true);
+        SelectButton(bagTabButton);
+    }
+
+    /* SelectButton Method:
+     * ~ Sets the currently highlighted UI button
+     * ~ Allows keyboard and gamepad navigation to begin
+     */
+    private void SelectButton(Button button)
+    {
+        if (button == null || EventSystem.current == null)
+            return;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(button.gameObject);
     }
 }
