@@ -27,6 +27,8 @@ public class ShiftManager : MonoBehaviour
     private int strikes;
     // True if every order was delivered
     private bool won;
+    // True once Carrot leaves the post office with the parcels, so the clock starts counting down
+    private bool shiftStarted;
 
     /* Public read only properties:
      * ~ Let the HUD and UI read the shift state without being able to change it
@@ -39,6 +41,11 @@ public class ShiftManager : MonoBehaviour
     public bool IsShiftOver
     {
         get { return shiftOver; }
+    }
+
+    public bool IsShiftStarted
+    {
+        get { return shiftStarted; }
     }
 
     public int Strikes
@@ -85,7 +92,7 @@ public class ShiftManager : MonoBehaviour
 
     /* Void Update Method:
      * ~ Runs every frame
-     * ~ Checks for restart, then counts down the shift clock and ends the shift at zero
+     * ~ Checks for restart, then counts down the shift clock once the shift has started, and ends the shift at zero
      */
     private void Update()
     {
@@ -105,6 +112,12 @@ public class ShiftManager : MonoBehaviour
             return;
         }
 
+        // The clock waits until Carrot leaves the post office with the parcels (per the GDD)
+        if (!shiftStarted)
+        {
+            return;
+        }
+
         // Counts down the shift clock in real seconds
         timeRemaining -= Time.deltaTime;
 
@@ -113,6 +126,27 @@ public class ShiftManager : MonoBehaviour
             timeRemaining = 0f;
             EndShift("Time's up!");
         }
+    }
+
+    /* Public StartShift Method:
+     * ~ Called by the PostOffice when Carrot leaves with the parcels
+     * ~ Starts the shift clock and every customer's patience at the same moment
+     */
+    public void StartShift()
+    {
+        if (shiftStarted || shiftOver)
+        {
+            return;
+        }
+
+        shiftStarted = true;
+
+        if (orderManager != null)
+        {
+            orderManager.StartPatience();
+        }
+
+        Debug.Log("Shift started!");
     }
 
     /* Public AddStrike Method:

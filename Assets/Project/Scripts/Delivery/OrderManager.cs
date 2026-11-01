@@ -23,9 +23,22 @@ public class OrderManager : MonoBehaviour
     // How many orders have been delivered this shift, for the day-grade screen
     public int DeliveredCount => deliveredOrders.Count;
 
+    // True once Carrot has picked up the parcels at the post office
+    private bool parcelsCollected;
+    // True once the shift has started, so customers' patience begins counting down
+    private bool patienceRunning;
+
+    /* Public ParcelsCollected Property:
+     * ~ Lets the PostOffice read whether the parcels were picked up, without being able to change it
+     */
+    public bool ParcelsCollected
+    {
+        get { return parcelsCollected; }
+    }
+
     /* Void Start Method:
      * ~ Runs once before the first frame
-     * ~ Starts every customer's patience timer at the beginning of the shift
+     * ~ Fills every customer's patience timer, which starts counting down once the shift starts
      */
     private void Start()
     {
@@ -49,6 +62,12 @@ public class OrderManager : MonoBehaviour
     {
         // Shift's over: stop ticking patience entirely, so moods don't keep changing behind the game over screen
         if (shiftManager != null && shiftManager.IsShiftOver)
+        {
+            return;
+        }
+
+        // Shift hasn't started yet: Carrot is still at the post office, so nobody's patience counts down
+        if (!patienceRunning)
         {
             return;
         }
@@ -92,10 +111,17 @@ public class OrderManager : MonoBehaviour
 
     /* Public GetOrderForHouse Method:
      * ~ Other scripts (like DeliveryZone) call this to ask which order belongs to a house
-     * ~ Returns the matching order, or null if that house has no order, it's already delivered, or the customer is Gone
+     * ~ Returns the matching order, or null if the parcels haven't been picked up yet, that house has no order,
+     *   it's already delivered, or the customer is Gone
      */
     public Order GetOrderForHouse(string houseName)
     {
+        // Carrot hasn't picked up the parcels yet, so there is nothing to deliver
+        if (!parcelsCollected)
+        {
+            return null;
+        }
+
         // Checks each order in the list one at a time
         foreach (Order order in orders)
         {
@@ -108,6 +134,24 @@ public class OrderManager : MonoBehaviour
 
         // No order matched this house
         return null;
+    }
+
+    /* Public CollectParcels Method:
+     * ~ Called by the PostOffice when Carrot presses Interact at the counter
+     * ~ Marks the parcels as picked up, so houses can now accept deliveries
+     */
+    public void CollectParcels()
+    {
+        parcelsCollected = true;
+    }
+
+    /* Public StartPatience Method:
+     * ~ Called by the ShiftManager when the shift starts (Carrot leaves the post office)
+     * ~ Starts every customer's patience counting down
+     */
+    public void StartPatience()
+    {
+        patienceRunning = true;
     }
 
     /* Public CompleteOrder Method:

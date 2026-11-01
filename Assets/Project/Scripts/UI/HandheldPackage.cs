@@ -80,12 +80,12 @@ public class HandheldPackage : MonoBehaviour
 
     /* Void Start Method:
      * ~ Runs once before the first frame
-     * ~ Fills the manifest and bag, then hides the handheld until Carrot reaches a door
+     * ~ Fills the manifest, then hides the handheld until Carrot reaches a door
+     * ~ The bag starts empty and is filled at the post office (see FillBag)
      */
     private void Start()
     {
         PopulateManifest();
-        PopulateBag();
 
         if (player == null)
         {
@@ -153,6 +153,15 @@ public class HandheldPackage : MonoBehaviour
             // Remembers this button so it can be removed once the order is delivered
             bagEntries[order] = button;
         }
+    }
+
+    /* Public FillBag Method:
+     * ~ Called by the PostOffice when Carrot picks up the parcels
+     * ~ Fills the bag with every package for the shift
+     */
+    public void FillBag()
+    {
+        PopulateBag();
     }
 
     /* Void RemoveBagEntry Method:
