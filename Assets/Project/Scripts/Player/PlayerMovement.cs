@@ -26,6 +26,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float exhaustedRecover = 30f;
     // Animator fed MoveX, MoveY, Speed and IsSprinting each frame (optional, auto-found if left empty)
     [SerializeField] private Animator animator;
+    // Reads the Interact action from the Input Actions asset (E on keyboard, A on gamepad)
+    [SerializeField] private InputActionReference interactAction;
+    // How long an Interact press is remembered, in seconds (the 100 to 200 ms buffer window from W6)
+    [SerializeField] private float interactBufferTime = 0.15f;
+    // A parcel sprite held above Carrot's head, shown only while an action state (PickUp or Deliver) plays
+    [SerializeField] private GameObject heldParcel;
 
     /* Declare private fields:
      * Fields can only be accessed within the script, cannot be seen outside
@@ -42,6 +48,10 @@ public class PlayerMovement : MonoBehaviour
     private float currentSpeed;
     // True after stamina runs out, until it recovers to exhaustedRecover
     private bool isExhausted;
+    // True while an action state (PickUp or Deliver) is playing, set by ActionLock on those states
+    private bool isBusy;
+    // Seconds left before a buffered Interact press is forgotten (0 means nothing is buffered)
+    private float interactBufferTimer;
 
     /* Public StaminaPercent Property:
      * ~ Gives stamina as a fraction from 0 (empty) to 1 (full)
@@ -74,6 +84,12 @@ public class PlayerMovement : MonoBehaviour
         {
             animator = GetComponent<Animator>();
         }
+
+        // The held parcel starts hidden until an action state shows it
+        if (heldParcel != null)
+        {
+            heldParcel.SetActive(false);
+        }
     }
 
     /* Void OnEnable Method:
@@ -86,6 +102,8 @@ public class PlayerMovement : MonoBehaviour
         moveAction.action.Enable();
         // Same idea for the Sprint action
         sprintAction.action.Enable();
+        // Same idea for the Interact action
+        interactAction.action.Enable();
     }
 
     /* Void OnDisable Method:
@@ -102,9 +120,31 @@ public class PlayerMovement : MonoBehaviour
      * ~ Method is called once per frame
      * ~ Reads Carrot's input each frame and remembers the last direction moved
      * ~ Decides walk or sprint speed and drains or refills stamina
+     * ~ Buffers Interact presses first, so a press during an action or the handheld isn't dropped
      */
     void Update()
     {
+        // Input buffer: an Interact press is remembered for interactBufferTime seconds instead of being dropped
+        if (interactAction.action.WasPressedThisFrame())
+        {
+            interactBufferTimer = interactBufferTime;
+        }
+        else if (interactBufferTimer > 0f)
+        {
+            interactBufferTimer -= Time.deltaTime;
+        }
+
+        // Stop Carrot from moving while an action state (PickUp or Deliver) is playing
+        if (isBusy)
+        {
+            moveInput = Vector2.zero;
+            currentSpeed = walkSpeed;
+
+            // Keep Carrot facing the same direction while the action plays
+            FeedAnimator(false, false);
+            return;
+        }
+
         // Stop Carrot from moving while navigating the handheld
         if (handheldPackage != null && handheldPackage.IsOpen)
         {
@@ -188,6 +228,49 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("MoveY", facing.y);
         animator.SetFloat("Speed", isMoving ? currentSpeed : 0f);
         animator.SetBool("IsSprinting", sprintHeld && isMoving && !isExhausted);
+    }
+
+    /* Public SetBusy Method:
+     * ~ Called by ActionLock when an action state starts (true) and ends (false)
+     * ~ While busy, Carrot can't move and buffered Interact presses wait instead of being used
+     * ~ Also shows the parcel above Carrot's head for the length of the action, so the action is easy to read
+     */
+    public void SetBusy(bool busy)
+    {
+        isBusy = busy;
+
+        if (heldParcel != null)
+        {
+            heldParcel.SetActive(busy);
+        }
+    }
+
+    /* Public PlayAction Method:
+     * ~ Sends an action trigger (PickUp or Deliver) to Carrot's Animator
+     * ~ The Animator's Any State transition then plays that action state
+     */
+    public void PlayAction(string trigger)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger(trigger);
+        }
+    }
+
+    /* Public ConsumeInteract Method:
+     * ~ Called by things Carrot can interact with (like the PostOffice) to ask "was Interact pressed?"
+     * ~ Returns true if Interact was pressed within the buffer window and Carrot isn't busy,
+     *   then clears the buffer so one press only counts once
+     */
+    public bool ConsumeInteract()
+    {
+        if (interactBufferTimer > 0f && !isBusy)
+        {
+            interactBufferTimer = 0f;
+            return true;
+        }
+
+        return false;
     }
 
     /* Void FixedUpdate Method:

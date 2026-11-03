@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PostOffice : MonoBehaviour
 {
@@ -13,8 +12,8 @@ public class PostOffice : MonoBehaviour
     [SerializeField] private ShiftManager shiftManager;
     // The handheld package object, whose bag is filled when the parcels are collected
     [SerializeField] private HandheldPackage handheldPackage;
-    // the type of interaction action that's needed??
-    [SerializeField] private InputActionReference interactAction;
+    // Carrot's movement script, which owns the buffered Interact press and plays the PickUp action
+    [SerializeField] private PlayerMovement player;
 
     /*Private fields:
     * ~ these fields are only accessible within the script
@@ -22,15 +21,6 @@ public class PostOffice : MonoBehaviour
 
     // a boolean determining whether or not the player is inside the post office.
     private bool playerInside;
-
-    /* Void OnEnable Method:
-     * ~ enables the interact action needed to be performed
-     */
-    void OnEnable()
-    {
-        // interact Action, calls action and calls Enable() method
-        interactAction.action.Enable();
-    }
 
     /* Void OnTriggerEnter2D Method:
      * ~ Unity calls this automatically when another collider enters the post office trigger
@@ -99,8 +89,8 @@ public class PostOffice : MonoBehaviour
             return;
         }
 
-        // WasPressedThisFrame is only true on the frame the button goes down, so one press is one pickup
-        if (interactAction.action.WasPressedThisFrame())
+        // Uses a buffered Interact press (from the last 0.15 seconds), so a press just before arriving still counts
+        if (player.ConsumeInteract())
         {
             PickUp();
         }
@@ -108,11 +98,20 @@ public class PostOffice : MonoBehaviour
 
     /* Void PickUp Method:
      * ~ Collects every parcel for the shift in one visit and fills the bag
+     * ~ Plays Carrot's PickUp action state, which locks his movement until it finishes
      */
     private void PickUp()
     {
         orderManager.CollectParcels();
         handheldPackage.FillBag();
+        player.PlayAction("PickUp");
+
+        // PickUp juice: a quick squash as Carrot lifts the parcels, the same pulse used on delivery
+        SquashStretch squashStretch = player.GetComponent<SquashStretch>();
+        if (squashStretch != null)
+        {
+            squashStretch.Pulse();
+        }
 
         Debug.Log("Carrot picked up the parcels. Head out to start the shift!");
     }

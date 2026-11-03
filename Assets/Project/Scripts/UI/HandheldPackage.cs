@@ -58,6 +58,8 @@ public class HandheldPackage : MonoBehaviour
     private Transform player;
     // Carrot's squash-and-stretch juice, pulsed on pickup (select) and deliver (confirm)
     private SquashStretch squashStretch;
+    // Carrot's movement script, used to play the Deliver action state on a correct delivery
+    private PlayerMovement playerMovement;
 
     // The chosen package in the BAG tab
     private Order selectedOrder;
@@ -93,6 +95,7 @@ public class HandheldPackage : MonoBehaviour
             if (taggedPlayer != null)
             {
                 player = taggedPlayer.transform;
+                playerMovement = player.GetComponent<PlayerMovement>();
                 squashStretch = player.GetComponent<SquashStretch>();
                 if (squashStretch == null)
                 {
@@ -226,6 +229,11 @@ public class HandheldPackage : MonoBehaviour
             if (squashStretch != null)
             {
                 squashStretch.Pulse();
+            }
+            // Plays Carrot's Deliver action state, which locks his movement until it finishes
+            if (playerMovement != null)
+            {
+                playerMovement.PlayAction("Deliver");
             }
             // Removes the delivered customer from the Manifest list and their package from the Bag
             RemoveManifestEntry(currentOrder);
