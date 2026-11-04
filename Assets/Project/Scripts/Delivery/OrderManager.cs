@@ -16,6 +16,10 @@ public class OrderManager : MonoBehaviour
 
     // Running total of points earned from completed deliveries
     public int Score { get; private set; }
+    // Maximum possible points for this shift, because every customer can give up to 20 points.
+    public int MaxPossibleScore => orders.Count * 20;
+    // Points performance normalized from 0.00 to 1.00
+    public float PointsPerformance => MaxPossibleScore > 0 ? Mathf.Clamp01((float)Score / MaxPossibleScore): 0f;
     // True once every order in the shift has been delivered
     public bool AllDelivered => deliveredOrders.Count == orders.Count;
     // True once every order has either been delivered or gone (nothing left for Carrot to do this shift)
@@ -163,21 +167,49 @@ public class OrderManager : MonoBehaviour
         patienceRunning = true;
     }
 
+    /* Private GetDeliveryPoints Method:
+    * ~ Calculates delivery points based on customer mood
+    */
+    private int GetDeliveryPoints(CustomerMood mood)
+    {
+        switch (mood)
+        {
+            case CustomerMood.Happy:
+                return 20;
+
+            case CustomerMood.Impatient:
+                return 15;
+
+            case CustomerMood.Angry:
+                return 5;
+
+            default:
+                return 0;
+        }
+    }
+
     /* Public CompleteOrder Method:
      * ~ Called by HandheldPackage once the correct package has been confirmed
      * ~ Marks the order delivered so it can't be redelivered, and adds its points to the score
      */
     public void CompleteOrder(Order order)
     {
-        if (order == null || deliveredOrders.Contains(order))
+        // Updated so that customers that are Gone cannot receive deliveries.
+        if (order == null || deliveredOrders.Contains(order) || order.mood == CustomerMood.Gone)
         {
             return;
         }
 
-        deliveredOrders.Add(order);
-        Score += order.pointValue;
+        // Calculate points from the customer's mood at delivery
+        int earnedPoints = GetDeliveryPoints(order.mood);
 
-        Debug.Log("Delivered to " + order.customerName + " (+" + order.pointValue + " pts, score: " + Score + ")");
+        // Mark the order as delivered
+        deliveredOrders.Add(order);
+
+        // Add the earned points to the shift score
+        Score += earnedPoints;
+
+        Debug.Log("Delivered to " + order.customerName + " (" + order.mood + ", +" + earnedPoints + " pts, score: " + Score + ")");
 
         // Lets the customer's bubble show the delivered face
         if (OrderDelivered != null)

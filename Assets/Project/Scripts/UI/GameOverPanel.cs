@@ -63,8 +63,11 @@ public class GameOverPanel : MonoBehaviour
      *   based on their final score and displays it on the day grade
      *   review screen.
      */
-    public void Show(int finalScore, bool won)
+    public void Show(int finalScore, bool won, float gradeScore)
     {
+        // Convert normalized grade (0.00-1.00) to a score (0-1000)
+        int displayScore = Mathf.RoundToInt(gradeScore * 1000f);
+
         string prefix = won ? "You Win! Final Score: " : "Shift Over! Final Score: ";
         string deliveries = "";
 
@@ -72,26 +75,31 @@ public class GameOverPanel : MonoBehaviour
         {
             int total = orderManager.GetOrders().Count;
             int made = orderManager.DeliveredCount;
-            deliveries = "\nDeliveries: " + made + "/" + total + " (missed " + (total - made) + ")";
+
+            deliveries = "\nDeliveries: " + made + "/" + total +
+                         " (missed " + (total - made) + ")";
         }
 
-        finalScoreText.text = prefix + finalScore + deliveries;
+        // Display the calculated score instead of raw delivery points
+        finalScoreText.text = prefix + displayScore + deliveries;
 
+        // Display only the letter grade
         if (letterGradeText != null)
         {
-            letterGradeText.text = "Day Grade: " + CalculateGrade(finalScore);
+            string letterGrade = ShiftGrading.GetLetterGrade(gradeScore);
+
+            letterGradeText.text = "Day Grade: " + letterGrade;
         }
 
         panel.SetActive(true);
         playerMovement.enabled = false;
-
     }
 
-    /* Calculate Grade Method:
+    /* Calculate Grade Method (no longer used):
      * ~ Determines the player's letter grade based on their final score.
      * ~ The higher the score the better the grade.
      * ~ Returns a letter grade from A to F.
-     */
+     
     private string CalculateGrade(int finalScore)
     {
         if (finalScore >= 50)
@@ -105,4 +113,5 @@ public class GameOverPanel : MonoBehaviour
         else
             return "F";
     }
+   */
 }

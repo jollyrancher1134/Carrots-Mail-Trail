@@ -43,7 +43,8 @@ public class HUDController : MonoBehaviour
     private void Update()
     {
         clockText.text = FormatTime(shiftManager.TimeRemaining);
-        scoreText.text = "Score: " + orderManager.Score;
+        //Changed "Score: " to "Points: " to better match the grading system
+        scoreText.text = "Points: " + orderManager.Score;
         strikesText.text = "Strikes: " + shiftManager.Strikes;
         UpdateStaminaBar();
     }

@@ -218,10 +218,14 @@ public class ShiftManager : MonoBehaviour
 
         Debug.Log(reason + " Final score: " + finalScore);
 
-        // Shows the end of shift panel
+        // Shows the end of shift panel with the final grading data
         if (gameOverPanel != null)
         {
-            gameOverPanel.Show(finalScore, won);
+            int maxPossibleScore = orderManager != null ? orderManager.MaxPossibleScore: 0;
+            bool allDelivered = orderManager != null && orderManager.AllDelivered;
+
+            float gradeScore = ShiftGrading.CalculateScore(finalScore, maxPossibleScore, timeRemaining, shiftDurationSeconds, strikes, allDelivered);
+            gameOverPanel.Show(finalScore, won, gradeScore);
         }
     }
 
