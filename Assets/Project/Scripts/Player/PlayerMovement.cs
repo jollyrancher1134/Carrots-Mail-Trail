@@ -62,6 +62,15 @@ public class PlayerMovement : MonoBehaviour
         get { return currentStamina / maxStamina; }
     }
 
+    /* Public IsExhausted Property:
+     * ~ True while Carrot is on his sprint cooldown (ran out of stamina and hasn't recovered yet)
+     * ~ Read only, so the HUD can recolor the stamina bar without being able to change it
+     */
+    public bool IsExhausted
+    {
+        get { return isExhausted; }
+    }
+
     [Header("UI References")]
     [SerializeField] private HandheldPackage handheldPackage;
 

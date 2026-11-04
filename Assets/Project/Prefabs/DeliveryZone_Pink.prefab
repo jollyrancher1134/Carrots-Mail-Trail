@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3066296860877695356}
   - component: {fileID: 8042073272026272232}
   - component: {fileID: 8927729415521646035}
+  - component: {fileID: 5512893047716204821}
+  - component: {fileID: 7301958264110385022}
   m_Layer: 8
   m_Name: DeliveryZone_Pink
   m_TagString: Untagged
@@ -148,3 +150,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   houseName: Pink
+--- !u!114 &5512893047716204821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645451216646196711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f97e09030c44e58849a6b6231cc6d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  happyFrames:
+  - {fileID: 21300000, guid: c09f911c8b4e45348a1937b7e8c84b36, type: 3}
+  - {fileID: 21300000, guid: 9e9265f05529407e9e9d829d85aa7652, type: 3}
+  - {fileID: 21300000, guid: 5eab06fc64944024a9a1bfbcec9570d7, type: 3}
+  - {fileID: 21300000, guid: 9f1fc64bded94eb49020bf83a720882c, type: 3}
+  - {fileID: 21300000, guid: 1d0ad38fe5934f84a264051871e8fd4e, type: 3}
+  - {fileID: 21300000, guid: 0e759eef39604d6aacbc35b89646083e, type: 3}
+  impatientFrames:
+  - {fileID: 21300000, guid: bf86a458b601476baed39faf556342d8, type: 3}
+  - {fileID: 21300000, guid: d40f6fdf117b4e6d9d0cfd7b119990f5, type: 3}
+  - {fileID: 21300000, guid: 229c24cd0c114772b8a0d40bffefe62f, type: 3}
+  - {fileID: 21300000, guid: b0a2b33177ae4708913d4ec75bce45d7, type: 3}
+  - {fileID: 21300000, guid: 6646fb6b6ccf4c05942f7c9c085d959b, type: 3}
+  - {fileID: 21300000, guid: f91b808c613b4d2a86d239ec7a7d05a1, type: 3}
+  angryFrames:
+  - {fileID: 21300000, guid: 6dad8461616445f88ceea078dc68a387, type: 3}
+  - {fileID: 21300000, guid: 3340ef8fbeb444668d4e464a62492c39, type: 3}
+  - {fileID: 21300000, guid: 267b8f59e9604b27a6ee0930d9b8e90d, type: 3}
+  - {fileID: 21300000, guid: 04685a9035fd4f9883707b68532aafbe, type: 3}
+  - {fileID: 21300000, guid: da18d2cadc6f4f56b327e4488be46f55, type: 3}
+  - {fileID: 21300000, guid: bc4dcdc438134352be994c2ba431f2b5, type: 3}
+  framesPerSecond: 8
+  angryFramesPerSecond: 12
+  bubbleMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  bubbleOffset: {x: 0, y: 1.5}
+  sortingOrder: 100
+  showWhenHappy: 1
+  impatientPulseSpeed: 3
+  angryPulseSpeed: 8
+  pulseAmount: 0.1
+  reactionTime: 1.5
+  shakeAmount: 0.08
+  shakeSpeed: 40
+--- !u!114 &7301958264110385022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645451216646196711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e55718e2df9489ba6976ab611c9b092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purpose: 1
+  lightOffset: {x: 0, y: 1}

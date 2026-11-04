@@ -9,6 +9,14 @@ public class HandheldInput : MonoBehaviour
     // Tracks which doorstep Carrot is currently standing at
     private DeliveryZone currentZone;
 
+    /* Public CurrentZone Property:
+     * ~ Lets other scripts (like PhoneAlertIcon) read which doorstep Carrot is at, without being able to change it
+     */
+    public DeliveryZone CurrentZone
+    {
+        get { return currentZone; }
+    }
+
     /* Update Method:
      * ~ Listens for Tab on keyboard or Y on gamepad
      * ~ Opens or closes the handheld
@@ -25,6 +33,15 @@ public class HandheldInput : MonoBehaviour
         if (!togglePressed)
             return;
 
+        TogglePhone();
+    }
+
+    /* Public TogglePhone Method:
+     * ~ Opens the handheld (to the Bag at a door with an order, otherwise the Manifest), or closes it if open
+     * ~ Called by Tab / Y, and by clicking the phone icon in the corner
+     */
+    public void TogglePhone()
+    {
         if (handheldPackage.IsOpen)
         {
             handheldPackage.Close();

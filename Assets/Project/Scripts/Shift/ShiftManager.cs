@@ -38,6 +38,11 @@ public class ShiftManager : MonoBehaviour
         get { return timeRemaining; }
     }
 
+    public float ShiftDuration
+    {
+        get { return shiftDurationSeconds; }
+    }
+
     public bool IsShiftOver
     {
         get { return shiftOver; }

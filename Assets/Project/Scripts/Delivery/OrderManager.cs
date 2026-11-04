@@ -28,6 +28,15 @@ public class OrderManager : MonoBehaviour
     // True once the shift has started, so customers' patience begins counting down
     private bool patienceRunning;
 
+    /* Public Events:
+     * ~ Other scripts (like CustomerBubble) listen to these to react when something happens to an order
+     * ~ The order it happened to is passed along, so each bubble can check if it was their customer
+     */
+    // Raised when the wrong package is confirmed at a customer's door
+    public event System.Action<Order> WrongPick;
+    // Raised when the right package is delivered
+    public event System.Action<Order> OrderDelivered;
+
     /* Public ParcelsCollected Property:
      * ~ Lets the PostOffice read whether the parcels were picked up, without being able to change it
      */
@@ -169,5 +178,30 @@ public class OrderManager : MonoBehaviour
         Score += order.pointValue;
 
         Debug.Log("Delivered to " + order.customerName + " (+" + order.pointValue + " pts, score: " + Score + ")");
+
+        // Lets the customer's bubble show the delivered face
+        if (OrderDelivered != null)
+        {
+            OrderDelivered(order);
+        }
+    }
+
+    /* Public ReportWrongPick Method:
+     * ~ Called by HandheldPackage when the wrong package is confirmed at a door
+     * ~ Lets the customer's bubble react, so the wrong pick reads in the world, not just on the handheld
+     */
+    public void ReportWrongPick(Order order)
+    {
+        if (order == null)
+        {
+            return;
+        }
+
+        Debug.Log(order.customerName + " got the wrong package");
+
+        if (WrongPick != null)
+        {
+            WrongPick(order);
+        }
     }
 }

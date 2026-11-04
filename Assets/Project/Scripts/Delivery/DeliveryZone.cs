@@ -21,6 +21,14 @@ public class DeliveryZone : MonoBehaviour
     private Coroutine openRoutine;
     private bool playerInside;
 
+    /* Public HouseName Property:
+     * ~ Lets other scripts (like CustomerBubble) read which house this zone belongs to, without being able to change it
+     */
+    public string HouseName
+    {
+        get { return houseName; }
+    }
+
     /* GetCurrentOrder Method:
      * ~ Returns the order belonging to this doorstep
      */
@@ -108,12 +116,16 @@ public class DeliveryZone : MonoBehaviour
             playerInside = false;
             HandheldInput input = other.GetComponent<HandheldInput>();
 
-            if (cameraController.IsFraming(transform))
+            // The camera or handheld can already be destroyed if this runs while the scene is unloading
+            if (cameraController != null && cameraController.IsFraming(transform))
             {
                 // Switches back to the street follow camera
                 cameraController.ExitDoorstep();
                 // Walking away from the door puts the handheld away
-                handheldPackage.Close();
+                if (handheldPackage != null)
+                {
+                    handheldPackage.Close();
+                }
             }
 
             // Cancels the delayed opening if Carrot leaves early

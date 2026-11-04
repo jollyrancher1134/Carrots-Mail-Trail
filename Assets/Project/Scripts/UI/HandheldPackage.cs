@@ -35,7 +35,7 @@ public class HandheldPackage : MonoBehaviour
     [SerializeField] private TMP_Text selectionText;
 
     [Header("Feedback")]
-    // The camera controller, shaken when the wrong package is confirmed
+    // The camera controller (no longer shaken on a wrong pick, the package row shakes instead)
     [SerializeField] private CameraController cameraController;
     // Tracks strikes and ends the shift once Carrot runs out of them
     [SerializeField] private ShiftManager shiftManager;
@@ -245,14 +245,17 @@ public class HandheldPackage : MonoBehaviour
             }
             Close();
         }
-        // Wrong package selected: shakes the camera, plays a sound, and counts as a strike
+        // Wrong package selected: shakes the package row, plays a sound, and counts as a strike
         else
         {
-            if (cameraController != null)
+            // Wrong pick juice: the chosen package shakes and flashes red (replaces the old camera shake)
+            if (bagEntries.TryGetValue(selectedOrder, out PackageButton wrongButton) && wrongButton != null)
             {
-                cameraController.Shake();
+                wrongButton.PlayWrongPick();
             }
             PlaySfx(wrongPickClip);
+            // The customer's speech bubble shows the wrong pick face above their door
+            orderManager.ReportWrongPick(currentOrder);
             if (shiftManager != null)
             {
                 shiftManager.AddStrike();
@@ -310,6 +313,12 @@ public class HandheldPackage : MonoBehaviour
      */
     public void Close()
     {
+        // The scene is unloading (stopping Play mode or restarting), and the handheld or its lists are already destroyed
+        if (this == null || packageList == null || selectionText == null)
+        {
+            return;
+        }
+
         // Clears the selected package
         selectedOrder = null;
         selectionText.text = "Selected: None";
@@ -338,6 +347,7 @@ public class HandheldPackage : MonoBehaviour
     {
         manifestPage.SetActive(true);
         bagPage.SetActive(false);
+        SetActiveTab(manifestTabButton, bagTabButton);
         SelectButton(manifestTabButton);
     }
 
@@ -348,7 +358,19 @@ public class HandheldPackage : MonoBehaviour
     {
         manifestPage.SetActive(false);
         bagPage.SetActive(true);
+        SetActiveTab(bagTabButton, manifestTabButton);
         SelectButton(bagTabButton);
+    }
+
+    /* SetActiveTab Method:
+     * ~ Keeps the open tab pressed down into its shadow and pops the other tab back up
+     */
+    private void SetActiveTab(Button openTab, Button otherTab)
+    {
+        if (openTab != null && openTab.TryGetComponent(out PixelPressButton open))
+            open.SetStuckDown(true);
+        if (otherTab != null && otherTab.TryGetComponent(out PixelPressButton other))
+            other.SetStuckDown(false);
     }
 
     /* SelectButton Method:

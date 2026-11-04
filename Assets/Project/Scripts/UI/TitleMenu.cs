@@ -8,7 +8,7 @@ public class TitleMenu : MonoBehaviour
      * ~ this allows for the value to be viewed inside the inspector
      */
     // The gameplay scene to load when Play is pressed (must be added to Build Settings)
-    [SerializeField] private string gameplaySceneName = "Testbed";
+    [SerializeField] private string gameplaySceneName = "Village";
     // The Play button, wired to PlayGame
     [SerializeField] private Button playButton;
     // The Quit button, wired to QuitGame

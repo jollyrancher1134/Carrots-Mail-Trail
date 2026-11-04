@@ -65,7 +65,7 @@ public class GameOverPanel : MonoBehaviour
      */
     public void Show(int finalScore, bool won)
     {
-        string prefix = won ? "You Win! Final Score: " : "Shift Over — Final Score: ";
+        string prefix = won ? "You Win! Final Score: " : "Shift Over! Final Score: ";
         string deliveries = "";
 
         if (orderManager != null)
