@@ -19,6 +19,8 @@ public class GameOverPanel : MonoBehaviour
     [SerializeField] private OrderManager orderManager;
     // The ShiftManager, for the Restart button
     [SerializeField] private ShiftManager shiftManager;
+    // The hand drawn report card shown at the end of the shift (faces, grade stamp and score)
+    [SerializeField] private ReportCard reportCard;
 
     /* Void Start Method:
      * ~ Runs once before the first frame
@@ -93,6 +95,12 @@ public class GameOverPanel : MonoBehaviour
 
         panel.SetActive(true);
         playerMovement.enabled = false;
+
+        // Fills in the report card with each customer's face, the stamped grade, and the score
+        if (reportCard != null)
+        {
+            reportCard.Show(orderManager, ShiftGrading.GetLetterGrade(gradeScore), displayScore);
+        }
     }
 
     /* Calculate Grade Method (no longer used):

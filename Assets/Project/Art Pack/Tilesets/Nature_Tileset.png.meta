@@ -4,136 +4,136 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 2079365690729269096
-    second: Nature_Tileset_0
+    second: Tree_Round
   - first:
       213: -1945104064634201803
-    second: Nature_Tileset_1
+    second: Trees_RoundCluster
   - first:
       213: 810461910939593765
-    second: Nature_Tileset_2
+    second: Bush_Spiky
   - first:
       213: 7131083851394800472
-    second: Nature_Tileset_3
+    second: Bush_Round
   - first:
       213: -3211274417320604244
-    second: Nature_Tileset_4
+    second: Rock_Large
   - first:
       213: -923772987137332420
-    second: Nature_Tileset_5
+    second: Pebble
   - first:
       213: -7889906281951516077
-    second: Nature_Tileset_6
+    second: Rock_Small
   - first:
       213: -1947129814938843962
-    second: Nature_Tileset_7
+    second: Rocks_Pair
   - first:
       213: -1704857557057056026
-    second: Nature_Tileset_8
+    second: Rocks_Tall
   - first:
       213: 508079797219810564
-    second: Nature_Tileset_9
+    second: Tree_Pine
   - first:
       213: 2403606967330122266
-    second: Nature_Tileset_10
+    second: Mushrooms_Brown
   - first:
       213: 7124919842496755282
-    second: Nature_Tileset_11
+    second: Mushroom_BrownTall
   - first:
       213: -4682051404616625036
-    second: Nature_Tileset_12
+    second: Grass_Dry
   - first:
       213: -7245235244481216198
-    second: Nature_Tileset_13
+    second: Stone_Pink
   - first:
       213: -4897700322372725869
-    second: Nature_Tileset_14
+    second: Rock_Large_Water
   - first:
       213: -7074104237837322120
-    second: Nature_Tileset_15
+    second: Pebble_Water
   - first:
       213: -760967148687148046
-    second: Nature_Tileset_16
+    second: Rock_Small_Water
   - first:
       213: 1998217975766664327
-    second: Nature_Tileset_17
+    second: Rocks_Pair_Water
   - first:
       213: -6660580359296053249
-    second: Nature_Tileset_18
+    second: Tree_Dead
   - first:
       213: 6098030380926546226
-    second: Nature_Tileset_19
+    second: Tree_DeadSmall
   - first:
       213: -2436189757946333316
-    second: Nature_Tileset_20
+    second: Trees_PineCluster
   - first:
       213: 4285658668457780707
-    second: Nature_Tileset_21
+    second: Mushroom_White
   - first:
       213: -4668592206723560774
-    second: Nature_Tileset_22
+    second: Mushrooms_Red
   - first:
       213: -1245531608656793876
-    second: Nature_Tileset_23
+    second: Rock_Large_WaterReeds
   - first:
       213: -222476748689200115
-    second: Nature_Tileset_24
+    second: Pebble_WaterGrass
   - first:
       213: -920630553507384276
-    second: Nature_Tileset_25
+    second: Rock_Small_WaterGrass
   - first:
       213: -5324439516388231251
-    second: Nature_Tileset_26
+    second: Rocks_Pair_WaterGrass
   - first:
       213: 6983677009692009708
-    second: Nature_Tileset_27
+    second: Stump_Large
   - first:
       213: 119156890897589805
-    second: Nature_Tileset_28
+    second: Stump_Small
   - first:
       213: 7099917999812859115
-    second: Nature_Tileset_29
+    second: Logs_Stack
   - first:
       213: 4974781751203170459
-    second: Nature_Tileset_30
+    second: Logs_StackSmall
   - first:
       213: -1327432584840399072
-    second: Nature_Tileset_31
+    second: Logs_Pile
   - first:
       213: -8700242152401134562
-    second: Nature_Tileset_32
+    second: LilyPads
   - first:
       213: 8147485451304721391
-    second: Nature_Tileset_33
+    second: LilyPad_Flower
   - first:
       213: -231808033247104362
-    second: Nature_Tileset_34
+    second: Water_Bit_1
   - first:
       213: -3129474590475988480
-    second: Nature_Tileset_35
+    second: Water_Bit_2
   - first:
       213: 9122292327037789338
-    second: Nature_Tileset_36
+    second: Water_Bit_3
   - first:
       213: -3210800734509399198
-    second: Nature_Tileset_37
+    second: Water_Bit_4
   - first:
       213: 5551800866326594017
-    second: Nature_Tileset_38
+    second: Log_Upright_Mossy
   - first:
       213: 8329487083744379416
-    second: Nature_Tileset_39
+    second: Log_Upright
   - first:
       213: -4529649989476253296
-    second: Nature_Tileset_40
+    second: Log_Mossy
   - first:
       213: 7767805120971029631
-    second: Nature_Tileset_41
+    second: Log_Diagonal
   - first:
       213: 3264103145584969100
-    second: Nature_Tileset_42
+    second: Log_Diagonal_Mossy
   - first:
       213: -8858445860686838962
-    second: Nature_Tileset_43
+    second: Log
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -242,14 +242,14 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nature_Tileset_0
+      name: Tree_Round
       rect:
         serializedVersion: 2
         x: 17
         y: 129
         width: 30
         height: 36
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -264,14 +264,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_1
+      name: Trees_RoundCluster
       rect:
         serializedVersion: 2
         x: 97
         y: 129
         width: 62
         height: 46
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -286,15 +286,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_2
+      name: Bush_Spiky
       rect:
         serializedVersion: 2
         x: 177
         y: 161
         width: 15
         height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.466667, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -308,15 +308,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_3
+      name: Bush_Round
       rect:
         serializedVersion: 2
         x: 193
         y: 161
         width: 15
         height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.466667, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -330,14 +330,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_4
+      name: Rock_Large
       rect:
         serializedVersion: 2
         x: 227
         y: 148
         width: 24
         height: 24
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -352,15 +352,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_5
+      name: Pebble
       rect:
         serializedVersion: 2
         x: 261
         y: 165
         width: 7
         height: 7
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.428571, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -374,15 +374,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_6
+      name: Rock_Small
       rect:
         serializedVersion: 2
         x: 273
         y: 162
         width: 11
         height: 8
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.454545, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -396,15 +396,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_7
+      name: Rocks_Pair
       rect:
         serializedVersion: 2
         x: 289
         y: 162
         width: 15
         height: 13
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.466667, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -418,14 +418,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_8
+      name: Rocks_Tall
       rect:
         serializedVersion: 2
         x: 305
         y: 160
         width: 14
         height: 16
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -440,14 +440,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_9
+      name: Tree_Pine
       rect:
         serializedVersion: 2
         x: 53
         y: 128
         width: 22
         height: 32
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -462,14 +462,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_10
+      name: Mushrooms_Brown
       rect:
         serializedVersion: 2
         x: 177
         y: 145
         width: 14
         height: 12
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -484,14 +484,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_11
+      name: Mushroom_BrownTall
       rect:
         serializedVersion: 2
         x: 195
         y: 145
         width: 12
         height: 12
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -506,14 +506,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_12
+      name: Grass_Dry
       rect:
         serializedVersion: 2
         x: 177
         y: 129
         width: 14
         height: 12
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -528,14 +528,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_13
+      name: Stone_Pink
       rect:
         serializedVersion: 2
         x: 193
         y: 129
         width: 14
         height: 13
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -550,14 +550,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_14
+      name: Rock_Large_Water
       rect:
         serializedVersion: 2
         x: 227
         y: 116
         width: 24
         height: 24
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -572,15 +572,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_15
+      name: Pebble_Water
       rect:
         serializedVersion: 2
         x: 261
         y: 133
         width: 7
         height: 7
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.428571, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -594,15 +594,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_16
+      name: Rock_Small_Water
       rect:
         serializedVersion: 2
         x: 273
         y: 130
         width: 11
         height: 8
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.454545, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -616,15 +616,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_17
+      name: Rocks_Pair_Water
       rect:
         serializedVersion: 2
         x: 288
         y: 128
         width: 31
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.483871, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -638,14 +638,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_18
+      name: Tree_Dead
       rect:
         serializedVersion: 2
         x: 20
         y: 97
         width: 24
         height: 26
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -660,15 +660,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_19
+      name: Tree_DeadSmall
       rect:
         serializedVersion: 2
         x: 55
         y: 96
         width: 17
         height: 23
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.470588, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -682,15 +682,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_20
+      name: Trees_PineCluster
       rect:
         serializedVersion: 2
         x: 104
         y: 84
         width: 47
         height: 41
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.489362, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -704,14 +704,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_21
+      name: Mushroom_White
       rect:
         serializedVersion: 2
         x: 178
         y: 113
         width: 12
         height: 11
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -726,14 +726,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_22
+      name: Mushrooms_Red
       rect:
         serializedVersion: 2
         x: 193
         y: 114
         width: 14
         height: 11
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -748,14 +748,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_23
+      name: Rock_Large_WaterReeds
       rect:
         serializedVersion: 2
         x: 226
         y: 84
         width: 26
         height: 24
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -770,14 +770,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_24
+      name: Pebble_WaterGrass
       rect:
         serializedVersion: 2
         x: 261
         y: 101
         width: 8
         height: 7
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -792,14 +792,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_25
+      name: Rock_Small_WaterGrass
       rect:
         serializedVersion: 2
         x: 273
         y: 98
         width: 12
         height: 10
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -814,15 +814,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_26
+      name: Rocks_Pair_WaterGrass
       rect:
         serializedVersion: 2
         x: 288
         y: 96
         width: 31
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.483871, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -836,14 +836,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_27
+      name: Stump_Large
       rect:
         serializedVersion: 2
         x: 20
         y: 65
         width: 24
         height: 19
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -858,14 +858,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_28
+      name: Stump_Small
       rect:
         serializedVersion: 2
         x: 57
         y: 64
         width: 14
         height: 13
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -880,15 +880,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_29
+      name: Logs_Stack
       rect:
         serializedVersion: 2
         x: 96
         y: 64
         width: 15
         height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.466667, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -902,15 +902,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_30
+      name: Logs_StackSmall
       rect:
         serializedVersion: 2
         x: 113
         y: 64
         width: 11
         height: 15
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.454545, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -924,15 +924,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_31
+      name: Logs_Pile
       rect:
         serializedVersion: 2
         x: 128
         y: 65
         width: 15
         height: 12
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.466667, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -946,14 +946,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_32
+      name: LilyPads
       rect:
         serializedVersion: 2
         x: 224
         y: 65
         width: 16
         height: 15
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -968,14 +968,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_33
+      name: LilyPad_Flower
       rect:
         serializedVersion: 2
         x: 241
         y: 65
         width: 14
         height: 13
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -990,15 +990,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_34
+      name: Water_Bit_1
       rect:
         serializedVersion: 2
         x: 257
         y: 72
         width: 7
         height: 6
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.428571, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1012,15 +1012,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_35
+      name: Water_Bit_2
       rect:
         serializedVersion: 2
         x: 265
         y: 72
         width: 5
         height: 4
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.4, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1034,15 +1034,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_36
+      name: Water_Bit_3
       rect:
         serializedVersion: 2
         x: 258
         y: 67
         width: 5
         height: 4
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.4, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1056,15 +1056,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_37
+      name: Water_Bit_4
       rect:
         serializedVersion: 2
         x: 264
         y: 65
         width: 7
         height: 6
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.428571, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1078,14 +1078,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_38
+      name: Log_Upright_Mossy
       rect:
         serializedVersion: 2
         x: 17
         y: 20
         width: 14
         height: 24
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1100,14 +1100,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_39
+      name: Log_Upright
       rect:
         serializedVersion: 2
         x: 33
         y: 20
         width: 14
         height: 24
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1122,14 +1122,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_40
+      name: Log_Mossy
       rect:
         serializedVersion: 2
         x: 51
         y: 33
         width: 26
         height: 14
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1144,14 +1144,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_41
+      name: Log_Diagonal
       rect:
         serializedVersion: 2
         x: 101
         y: 22
         width: 22
         height: 20
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1166,14 +1166,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_42
+      name: Log_Diagonal_Mossy
       rect:
         serializedVersion: 2
         x: 133
         y: 22
         width: 22
         height: 20
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1188,14 +1188,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nature_Tileset_43
+      name: Log
       rect:
         serializedVersion: 2
         x: 51
         y: 17
         width: 26
         height: 14
-      alignment: 7
+      alignment: 9
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -1223,50 +1223,50 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Nature_Tileset_0: 2079365690729269096
-      Nature_Tileset_1: -1945104064634201803
-      Nature_Tileset_10: 2403606967330122266
-      Nature_Tileset_11: 7124919842496755282
-      Nature_Tileset_12: -4682051404616625036
-      Nature_Tileset_13: -7245235244481216198
-      Nature_Tileset_14: -4897700322372725869
-      Nature_Tileset_15: -7074104237837322120
-      Nature_Tileset_16: -760967148687148046
-      Nature_Tileset_17: 1998217975766664327
-      Nature_Tileset_18: -6660580359296053249
-      Nature_Tileset_19: 6098030380926546226
-      Nature_Tileset_2: 810461910939593765
-      Nature_Tileset_20: -2436189757946333316
-      Nature_Tileset_21: 4285658668457780707
-      Nature_Tileset_22: -4668592206723560774
-      Nature_Tileset_23: -1245531608656793876
-      Nature_Tileset_24: -222476748689200115
-      Nature_Tileset_25: -920630553507384276
-      Nature_Tileset_26: -5324439516388231251
-      Nature_Tileset_27: 6983677009692009708
-      Nature_Tileset_28: 119156890897589805
-      Nature_Tileset_29: 7099917999812859115
-      Nature_Tileset_3: 7131083851394800472
-      Nature_Tileset_30: 4974781751203170459
-      Nature_Tileset_31: -1327432584840399072
-      Nature_Tileset_32: -8700242152401134562
-      Nature_Tileset_33: 8147485451304721391
-      Nature_Tileset_34: -231808033247104362
-      Nature_Tileset_35: -3129474590475988480
-      Nature_Tileset_36: 9122292327037789338
-      Nature_Tileset_37: -3210800734509399198
-      Nature_Tileset_38: 5551800866326594017
-      Nature_Tileset_39: 8329487083744379416
-      Nature_Tileset_4: -3211274417320604244
-      Nature_Tileset_40: -4529649989476253296
-      Nature_Tileset_41: 7767805120971029631
-      Nature_Tileset_42: 3264103145584969100
-      Nature_Tileset_43: -8858445860686838962
-      Nature_Tileset_5: -923772987137332420
-      Nature_Tileset_6: -7889906281951516077
-      Nature_Tileset_7: -1947129814938843962
-      Nature_Tileset_8: -1704857557057056026
-      Nature_Tileset_9: 508079797219810564
+      Tree_Round: 2079365690729269096
+      Trees_RoundCluster: -1945104064634201803
+      Mushrooms_Brown: 2403606967330122266
+      Mushroom_BrownTall: 7124919842496755282
+      Grass_Dry: -4682051404616625036
+      Stone_Pink: -7245235244481216198
+      Rock_Large_Water: -4897700322372725869
+      Pebble_Water: -7074104237837322120
+      Rock_Small_Water: -760967148687148046
+      Rocks_Pair_Water: 1998217975766664327
+      Tree_Dead: -6660580359296053249
+      Tree_DeadSmall: 6098030380926546226
+      Bush_Spiky: 810461910939593765
+      Trees_PineCluster: -2436189757946333316
+      Mushroom_White: 4285658668457780707
+      Mushrooms_Red: -4668592206723560774
+      Rock_Large_WaterReeds: -1245531608656793876
+      Pebble_WaterGrass: -222476748689200115
+      Rock_Small_WaterGrass: -920630553507384276
+      Rocks_Pair_WaterGrass: -5324439516388231251
+      Stump_Large: 6983677009692009708
+      Stump_Small: 119156890897589805
+      Logs_Stack: 7099917999812859115
+      Bush_Round: 7131083851394800472
+      Logs_StackSmall: 4974781751203170459
+      Logs_Pile: -1327432584840399072
+      LilyPads: -8700242152401134562
+      LilyPad_Flower: 8147485451304721391
+      Water_Bit_1: -231808033247104362
+      Water_Bit_2: -3129474590475988480
+      Water_Bit_3: 9122292327037789338
+      Water_Bit_4: -3210800734509399198
+      Log_Upright_Mossy: 5551800866326594017
+      Log_Upright: 8329487083744379416
+      Rock_Large: -3211274417320604244
+      Log_Mossy: -4529649989476253296
+      Log_Diagonal: 7767805120971029631
+      Log_Diagonal_Mossy: 3264103145584969100
+      Log: -8858445860686838962
+      Pebble: -923772987137332420
+      Rock_Small: -7889906281951516077
+      Rocks_Pair: -1947129814938843962
+      Rocks_Tall: -1704857557057056026
+      Tree_Pine: 508079797219810564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

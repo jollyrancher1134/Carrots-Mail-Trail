@@ -30,6 +30,10 @@ public class GameAudio : MonoBehaviour
     // Played whenever any button is clicked or pressed with the keyboard or gamepad
     [SerializeField] private AudioClip uiClickClip;
 
+    [Header("Post Office")]
+    // Played when Carrot picks up the parcels at the post office
+    [SerializeField] private AudioClip parcelPickupClip;
+
     [Header("Deliveries")]
     // Played when the right package is delivered to a Happy customer
     [SerializeField] private AudioClip goodDeliveryClip;
@@ -61,6 +65,8 @@ public class GameAudio : MonoBehaviour
     private AudioSource musicSource;
     // Plays every one shot sound effect
     private AudioSource sfxSource;
+    // Plays the UI click, kept alive between scenes (shared by the Title and Village GameAudio)
+    private static AudioSource clickSource;
     // Buttons that already play the click, so none get it twice
     private readonly HashSet<Button> hookedButtons = new HashSet<Button>();
     // Counts down to the next check for new buttons (bag packages are made after the scene starts)
@@ -69,6 +75,7 @@ public class GameAudio : MonoBehaviour
     private bool playedHalfway;
     private bool playedLowTime;
     private bool playedShiftEnd;
+    private bool playedParcelPickup;
 
     /* Void Awake Method:
      * ~ Runs once when the scene loads, before anything else
@@ -132,7 +139,7 @@ public class GameAudio : MonoBehaviour
 
     /* Void Update Method:
      * ~ Runs every frame
-     * ~ Hooks the click sound onto any new buttons, and plays the shift clock sounds at the right moments
+     * ~ Hooks the click sound onto any new buttons, plays the parcel pickup sound, and plays the shift clock sounds at the right moments
      */
     private void Update()
     {
@@ -142,6 +149,13 @@ public class GameAudio : MonoBehaviour
         {
             buttonScanTimer = 0.5f;
             HookNewButtons();
+        }
+
+        // Parcel pickup, once, the moment Carrot collects the parcels at the post office
+        if (!playedParcelPickup && orderManager != null && orderManager.ParcelsCollected)
+        {
+            playedParcelPickup = true;
+            PlaySfx(parcelPickupClip);
         }
 
         if (shiftManager == null)
@@ -160,6 +174,9 @@ public class GameAudio : MonoBehaviour
             musicSource.volume = Mathf.MoveTowards(musicSource.volume, 0f, musicFadeRate * Time.unscaledDeltaTime);
             return;
         }
+
+        // Keeps the music at musicVolume, so it can be tuned in the inspector while playing
+        musicSource.volume = musicVolume;
 
         // The clock hasn't started yet (Carrot is still at the post office)
         if (!shiftManager.IsShiftStarted)
@@ -209,10 +226,26 @@ public class GameAudio : MonoBehaviour
 
     /* Void PlayClick Method:
      * ~ Plays the UI click sound
+     * ~ Uses its own AudioSource that survives scene changes, because Play, Restart and Quit load a new scene
+     *   straight away, which would destroy this object and cut the click off
      */
     private void PlayClick()
     {
-        PlaySfx(uiClickClip);
+        if (uiClickClip == null)
+        {
+            return;
+        }
+
+        if (clickSource == null)
+        {
+            GameObject clickObject = new GameObject("UIClickSound");
+            DontDestroyOnLoad(clickObject);
+            clickSource = clickObject.AddComponent<AudioSource>();
+            clickSource.playOnAwake = false;
+            clickSource.spatialBlend = 0f;
+        }
+
+        clickSource.PlayOneShot(uiClickClip, sfxVolume);
     }
 
     /* Void OnOrderDelivered Method:

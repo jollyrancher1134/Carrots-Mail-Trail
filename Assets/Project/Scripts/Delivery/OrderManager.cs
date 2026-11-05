@@ -26,6 +26,8 @@ public class OrderManager : MonoBehaviour
     public bool AllResolved => orders.TrueForAll(order => deliveredOrders.Contains(order) || order.mood == CustomerMood.Gone);
     // How many orders have been delivered this shift, for the day-grade screen
     public int DeliveredCount => deliveredOrders.Count;
+    // True if this order has been delivered (used by the report card to pick each customer's face)
+    public bool IsDelivered(Order order) => deliveredOrders.Contains(order);
 
     // True once Carrot has picked up the parcels at the post office
     private bool parcelsCollected;

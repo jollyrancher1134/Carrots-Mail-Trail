@@ -8,7 +8,12 @@ public class Footsteps : MonoBehaviour
      * ~ this allows for the value to be viewed inside the inspector
      */
     [Header("Steps")]
-    // How far Carrot walks between footsteps, in world units
+    // On: steps come from Animation Events on the landing frames of Carrot's Run clips (frame accurate)
+    // Off: steps are counted by distance instead (stepDistance), as a backup if the events are ever removed
+    [SerializeField] private bool useAnimationEvents = true;
+    // The shortest time between two steps, so blended clips (running diagonally) don't puff twice on one landing
+    [SerializeField] private float minStepInterval = 0.12f;
+    // How far Carrot walks between footsteps, in world units (only used when useAnimationEvents is off)
     [SerializeField] private float stepDistance = 0.6f;
     // Where Carrot's feet are, measured from his position
     [SerializeField] private Vector2 feetOffset = new Vector2(0f, -0.4f);
@@ -41,6 +46,8 @@ public class Footsteps : MonoBehaviour
     private float distanceSinceStep;
     // The dust particle system built in Start
     private ParticleSystem dust;
+    // When the last step happened, used by minStepInterval
+    private float lastStepTime = -1f;
 
     /* Void Awake Method:
      * ~ Runs once when Carrot is loaded, before anything else
@@ -113,6 +120,12 @@ public class Footsteps : MonoBehaviour
      */
     private void FixedUpdate()
     {
+        // The Run clips' Animation Events are taking the steps instead
+        if (useAnimationEvents)
+        {
+            return;
+        }
+
         float moved = rb.linearVelocity.magnitude * Time.fixedDeltaTime;
 
         // Standing still: the next step starts fresh when he moves again
@@ -130,11 +143,32 @@ public class Footsteps : MonoBehaviour
         }
     }
 
+    /* Public OnFootstep Method:
+     * ~ Called by Animation Events on the landing frames of Carrot's Run clips (frames 1 and 5, where his body squashes lowest)
+     * ~ Walking reuses the Run clips at 0.6 speed, so walking steps land on the same frames, just slower
+     * ~ Ignores events while he's standing still or when two blended clips land on the same frame
+     */
+    public void OnFootstep()
+    {
+        if (!useAnimationEvents || rb.linearVelocity.magnitude < 0.1f)
+        {
+            return;
+        }
+
+        if (Time.time - lastStepTime < minStepInterval)
+        {
+            return;
+        }
+
+        TakeStep();
+    }
+
     /* Void TakeStep Method:
      * ~ Puffs dust at Carrot's feet and tells any listeners (like a future footstep sound) that he stepped
      */
     private void TakeStep()
     {
+        lastStepTime = Time.time;
         Vector2 feet = (Vector2)transform.position + feetOffset;
 
         if (dust != null)

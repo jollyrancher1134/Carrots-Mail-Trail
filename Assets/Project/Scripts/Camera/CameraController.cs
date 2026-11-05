@@ -19,6 +19,12 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float lookAheadSmoothTime = 0.3f;
     // The playable area of the map (MapBounds is dragged in through the inspector)
     [SerializeField] private BoxCollider2D mapBounds;
+    // Builds invisible walls along the MapBounds edges so Carrot can walk up to the edge but never off the map
+    [SerializeField] private bool buildBorderWalls = true;
+    // How thick each border wall is, in tiles (thick enough that sprinting can't push through)
+    [SerializeField] private float borderWallThickness = 2f;
+    // Moves the top wall down into the map, in tiles, since Carrot's head and ears stick up past his collider
+    [SerializeField] private float topWallInset = 0.75f;
     // How zoomed in the doorstep camera gets (smaller = closer)
     [SerializeField] private float doorstepOrthoSize = 3f;
     // How gently the doorstep camera eases in, holds, and eases back out
@@ -68,6 +74,42 @@ public class CameraController : MonoBehaviour
         streetOrthoSize = cam.orthographicSize;
         // Starts the shake's base position at wherever the camera already is
         basePosition = transform.position;
+
+        if (buildBorderWalls && mapBounds != null)
+        {
+            BuildBorderWalls();
+        }
+    }
+
+    /* Void BuildBorderWalls Method:
+     * ~ Makes one invisible object with four solid BoxCollider2Ds sitting just outside the MapBounds box
+     * ~ Uses the same box the camera clamps to, so Carrot stops at the exact edge where the camera stops
+     * ~ MapBounds itself is a trigger (it can't block anything), so the walls are the part that actually stops him
+     */
+    private void BuildBorderWalls()
+    {
+        Bounds map = mapBounds.bounds;
+        float t = borderWallThickness;
+
+        GameObject walls = new GameObject("MapBorderWalls");
+
+        // Left and right walls run the full height, plus the corners
+        AddWall(walls, new Vector2(map.min.x - t / 2f, map.center.y), new Vector2(t, map.size.y + t * 2f));
+        AddWall(walls, new Vector2(map.max.x + t / 2f, map.center.y), new Vector2(t, map.size.y + t * 2f));
+        // Bottom and top walls run the full width, plus the corners
+        AddWall(walls, new Vector2(map.center.x, map.min.y - t / 2f), new Vector2(map.size.x + t * 2f, t));
+        // The top wall sits lower by topWallInset, so Carrot's head stays on the grass instead of poking off the map
+        AddWall(walls, new Vector2(map.center.x, map.max.y - topWallInset + t / 2f), new Vector2(map.size.x + t * 2f, t));
+    }
+
+    /* Void AddWall Method:
+     * ~ Adds one solid box collider to the walls object, centred at the given world position
+     */
+    private void AddWall(GameObject walls, Vector2 centre, Vector2 size)
+    {
+        BoxCollider2D wall = walls.AddComponent<BoxCollider2D>();
+        wall.offset = centre;
+        wall.size = size;
     }
 
     /* Public Shake Method:
